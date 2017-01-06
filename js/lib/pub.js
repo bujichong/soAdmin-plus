@@ -57,36 +57,33 @@ var $util = {
         });
         form.submit().html("");
     },
-    maxIframePop : function (opt,reloadGrid) {
+    iframePop : function (opt,grid) {
+        window._refreshParent = false;
         if (typeof(opt)=='string') {
-            var opt = {iframe:opt};
+            opt = {content:opt};
         };
-        var popOpt = $.extend({
-            cls: 'pop-iframePage',
-            type: 'iframe',
-            //iframe: url,
-            width: $(window).width(),
-            height : $(window).height(),
-            offset : [0, 12],
-            showTitle : false,
-            drag : false,
-            reloadGrid : false,//重载父页面的grid
-            closePop: function () {}
+        var layerOpt = $.extend({//layer
+          type: 2,
+          title :'提示',
+          // content:url,
+          area :['100%', '100%']
         },opt||{});
-        if (opt.reloadGrid||reloadGrid) {
-            popOpt.closePop = function () {
-                popOpt.closePop();
-                if (window._refreshParent)$grid.reload(grid);
+        if (grid) {
+            layerOpt.end = function (){
+                opt.end&&opt.end();
+                if (window._refreshParent){
+                    $grid.reload(grid);
+                }
             }
-        };
-        var popI = $.sobox.pop(popOpt);
-        var str = popOpt.iframe;
+          }
+        var popIndex = layer.open(layerOpt);
+        // window.console && console.log(popIndex);
+        var str = layerOpt.content;
         if (str.indexOf("/") != 0) {
-            str = location.pathname.replace(/\/[^/]*$/, "/") + popOpt.iframe;
-            window.console && console.log(str);
-            $pop[str] = popI;
+            str = location.pathname.replace(/\/[^/]*$/, "/") + layerOpt.content;
         }
-        return popI;
+        window.console && console.log(str);
+        $pop[str] = popIndex;
     },
     fmtDate: function (format, date) {
         date = date || new Date();
@@ -175,24 +172,41 @@ var $util = {
             window.console && console.log(e);
         }
     },
-    closePop : function (fn) {
-        var p = parent.window;
-        if (fn) {
-            try {
-                fn(p);
+    closePop : function (opt) {
+        var opt = $.extend({
+            popIndex : null,
+            callback : function () {},
+            refreshGrid : false
+        },opt||{});
+
+        if (opt.popIndex) {//如果关闭当前window下的pop
+            opt.callback();
+            layer.close(opt.popIndex);
+            return;
+        }else{//关闭父级pop
+            var p = parent.window;
+            if (opt.refreshGrid) {
+                p._refreshParent = true;
+            };
+            try {//试运行callback
+                opt.callback(p);
             } catch (e) {
                 window.console && console.log(e);
             }
-        }
-        try {
-            var tt = location.pathname + (location.search || '');
-            // window.console && console.log(tt);
-            window.console && console.log(p.$pop[tt]);
-            // if (p.$pop[tt])p.$pop[tt].removePop();
-            if (p.$pop[tt])p.layer.close(p.$pop[tt]);
-        } catch (e) {
-            window.console && console.log(e);
-        }
+
+            try {//试关闭open
+                var tt = location.pathname + (location.search || '');
+                window.console && console.log(tt);
+                window.console && console.log(p.$pop[tt]);
+                // if (p.$pop[tt])p.$pop[tt].removePop();
+                if (p.$pop[tt])p.layer.close(p.$pop[tt]);
+
+            } catch (e) {
+                window.console && console.log(e);
+            }
+        };
+
+
     },
     down: function (url, param, method) {
         var inputs = [];
@@ -260,7 +274,7 @@ var $ajax = {
                             url: url, type: 'post', data: data, dataType: 'json',
                             beforeSend: function (jqXHR, settings) {
                                 loadingIndex = layer.load(0, {shade: false});
-                                // $.sobox.loading({cls: 'so-ajaxLoading', width: 158, content: '提交中，请稍候...'});
+                                //ajaxLoading = $.sobox.loading({cls: 'so-ajaxLoading', width: 158, content: '提交中，请稍候...'});
                             },
                             complete: function (jqXHR, textStatus) {
                                 //根据textStatus修改提示
@@ -312,9 +326,7 @@ var $ajax = {
                     });
 
 
-                // $.sobox.confirm("提示", msg, function () {
 
-                // });
                 return dtd.promise();
             }
             return $.when(event(dtd));
@@ -428,7 +440,7 @@ var $grid = {
             alert("页面不存在" + grid);
             return;
         }
-        var top = ($(grid).position().top+10) || 36;
+        var top = $(grid).position().top || 36;
         var gridCfg = {
             fitColumns: true,
             singleSelect: true,
@@ -444,6 +456,7 @@ var $grid = {
         $.extend(true, gridCfg, cfg);
         var titles = [], fields = [];
         if (gridCfg.offset) gridCfg.height += gridCfg.offset;
+        gridCfg.height = gridCfg.height -10;
         for (var i = 0; i < gridCfg.columns.length; i++) {
             var cols = gridCfg.columns[i];
             $.each(cols, function (inx, col) {
@@ -644,13 +657,13 @@ var $grid = {
                     var rows = $(grid).datagrid(opt.check?"getChecked":"getSelections");
                     if (opt.notNull && rows.length == 0) {
                         if (opt.notNull === true) opt.notNull = "请选择记录!";
-                        layer.msg(o.notNull,{icon:0});
+                        layer.msg(opt.notNull,{icon:0});
                         // $.sobox.warning(opt.notNull);
                         return;
                     }
                     if (opt.onlyOne && rows.length != 1) {
                         if (opt.onlyOne === true)opt.onlyOne = "请选择需要操作的一条记录!";
-                        layer.msg(o.onlyOne,{icon:0});
+                        layer.msg(opt.onlyOne,{icon:0});
                         // $.sobox.warning(opt.onlyOne);
                         return;
                     }
@@ -685,10 +698,12 @@ var $grid = {
                             });
                         } else {
                             window._refreshParent = false;
-                            var areaVal = opt.popMax?['100%', '100%']:[(o.popWidth+'px') || '560px',(o.popHeight+'px') || '300px'];
+                            opt.popWidth = opt.popWidth || 560;
+                            opt.popHeight = opt.popHeight || 300;
+                            var areaVal = opt.popMax?['100%', '100%']:[(opt.popWidth+'px'),(opt.popHeight+'px')];
                             var popIndex = layer.open({//layer
                               type: 2,
-                              title : o.title,
+                              title : opt.title,
                               content:url,
                               area :areaVal,
                               end : function () {
@@ -737,7 +752,7 @@ var $grid = {
 };
 
 var $pop = {
-    popGrid: function (opt) {
+    popGrid: function (opt,target) {
         opt = opt || {};
         if (!opt.url && !opt.code) {
             alert("请配置表格数据源参数url或者code");
@@ -757,24 +772,29 @@ var $pop = {
         if (!init) {
             var searchName = data.searchName || 'searchValue';
             var searchLabel = data.searchLabel || '';
-            var boxTpl = "<div id='pop_{gridId}' style='display:none'><p class='p-tableHead'><span class='s-ser-item'><input class='txt w200' type='text' value='' name='"+searchName+"' placeholder='"+searchLabel+"' required='true'/></span><span><input type='button' class='btn btn-submit fnSearch' value='查 询' /></span><input type='button' class='btn btn-submit fnSure' value='确 定' /></span></p><div id='{gridId}'></div></div>";
+            var boxTpl = "<div id='pop_{gridId}' style='display:none'><p class='p-tableHead'><span class='s-ser-item'><input class='txt w200' type='text' value='' name='"+searchName+"' placeholder='"+searchLabel+"' required='true'/></span><span><input type='button' class='btn btn-submit fnSearch' value='查 询' /></span><input type='button' class='btn btn-submit fnSure' value='确 定' /></span></p><div class='pad-l10 pad-r10 pad-b5'><div id='{gridId}'></div></div></div>";
             $('body').append($util.format(boxTpl, {gridId: gridId}));
         }
 
         var boxOpt = {
             type :1,
             title: '请双击选择',
-            area : ['500px','415px'],
+            area : ['500px','476px'],
             content: $('#pop_' + gridId)
         };
         $.extend(true, boxOpt, data.boxOpt || {});
         if (data.boxOpt.width) {boxOpt.area[0] = data.boxOpt.width+'px'};
         if (data.boxOpt.height) {boxOpt.area[1] = data.boxOpt.height+'px'};
+        //清除验证的tooltip
+        var $form = $(target).parents('.hk_form');
+        if ($form) {
+            $form.find(".hk_form .txta,:input").tooltip("destroy");
+        };
         $pop[gridId] = layer.open(boxOpt);
         if (!init) {
             var valueId = data.valueId, textId = data.textId
             ,valueVal = data.valueVal||'id', textVal = data.textVal||'text'
-                , gridCfg = {height: (boxOpt.height - 88), width: '100%'};
+                , gridCfg = {height: (boxOpt.height - 94), width: '100%'};
             $.extend(true, gridCfg, data.gridCfg || {});
             gridCfg.columns = gridCfg.columns || data.cols;
             if (!gridCfg.columns && data.code) {
@@ -789,6 +809,7 @@ var $pop = {
                 alert("请配置表格列信息!");
                 return;
             }
+	    gridCfg.fitColumns = opt.fitCol || true;
             gridCfg.onDblClickRow = function (index, row) {
                 window.console && console.log(textId,valueId,row);
                 if (valueId)$('#' + valueId).val(row[valueVal]);
@@ -882,6 +903,40 @@ var $pop = {
             }];
         }
         $pop[treeId] = $.sobox.pop(boxOpt);
+    },
+    popForm : function (opt) {
+        var opt =$.extend({
+            target : null,//需要弹出的对象class或者id
+            refreshGrid : true,//是否刷新grid
+            gridId : 'gridBox',//需要刷新grid的id
+            width : 400,height:300,//pop宽高
+            beforePop : function ($formBox) {},//弹窗之前的事情
+            afterSubmit : function (rst,$formBox) {}//提交之后的事件
+        },opt||{});
+        var temPop;
+        var $formBox = $(opt.target);
+        $formBox.find('.hk_form').attr("data-opt","{'callback':'submitPopForm'}");
+        window.submitPopForm = function (rst) {
+            if (rst.state) {
+                layer.close(temPop);
+                if (opt.refreshGrid) {$grid.reload(opt.grid);};
+                opt.afterSubmit(rst,$formBox);
+            };
+        }
+        opt.beforePop($formBox);
+        temPop = layer.open({
+            type:1,
+            title : opt.title,
+            area:[opt.width+'px',opt.height+'px'],
+            content : $formBox,
+            end: function () {
+                $formBox.clear();
+            }
+        });
+        $formBox.find('.btn-closePop').click(function () {
+            layer.close(temPop);
+        });
+        return temPop;//返回layer的序列
     }
 };
 
@@ -929,7 +984,12 @@ var $hook = {
                 $util.closePop();
             });
         }
+        if ($(".hk_form .btn-closePop").length) {
+            $(".hk_form .btn-closePop").click(function () {
+                $util.closePop();
+            });
 
+        }
 
         if ($('.hk_date').length) {
             $('.hk_date').addClass('Wdate').each(function () {
@@ -968,7 +1028,7 @@ var $hook = {
                         if (required) {
                             var $newTxt = _self.next('.combo').find('.textbox-text');
                             // _self.next('.combo').addClass('required');
-                            window.console && console.log($newTxt);
+                            //window.console && console.log($newTxt);
                             $newTxt.attr('placeholder','请选择...').addClass('required {required:true,messages:{required:"此项为必选"}}');
                             // .rules("add",{required:true});
                         };
@@ -983,39 +1043,65 @@ var $hook = {
                 var rdm = Math.floor(Math.random()*1000000);
                 var myOpt = $util.data(_self);
                 if (myOpt.type=='tree') {
-                var pData = $.extend({
-                    //type: null,//'tree'
-                    url : null,//json url
-                    width:'400px',
-                    height:'300px',
-                    title : '请单击选择',
-                    value:'text'
+                    var pData = $.extend({
+                        // type: null,//'tree'
+                        url : null,//json url
+                        valueId : null,
+                        valuePid : null,
+                        // selectedId : null,
+                        width:400,height:300,
+                        title : '请双击选择',
+                        value:'text',
+                        justLeaf: false,
+                        data : null,
+                        flatData : true,
+                        onDblClick : function (node) {}
                     },myOpt||{});
 
+                $('body').append('<div id="popTreeP-'+rdm+'" class="pad15 none"><ul id="ul-Tree-'+rdm+'"></ul></div>');
+                var alreadyRenderTree = false,treePop= null;
                   _self.click(function() {
-                      var treePop = layer.open({
-                        type: 0,
-                        content: '<ul id="ul-Tree-'+rdm+'"></ul>',
-                        area : [pData.width,pData.height],
+                    treePop = layer.open({
+                        type: 1,
+                        content: $('#popTreeP-'+rdm),
+                        area : [pData.width+'px',pData.height+'px'],
                         title :pData.title,
                         btn:null
                       });
-                      $('#ul-Tree-'+rdm).tree({
-                        animate : true,
-                        lines : true,
-                        url:pData.url,
-                        flatData: true,
-                        onClick : function (node) {
-                          _self.val(node[pData.value]);
-                          layer.close(treePop);
+
+                        var treeOpt = {
+                            animate : true,
+                            lines : true,
+                            url : pData.url,
+                            data : pData.data,
+                            flatData: pData.flatData,
+                            onDblClick : function (node) {
+                                window.console && console.log(node);
+                                if (pData.justLeaf&&node.children!=null) {return false;};
+                                  _self.val(node[pData.value]);
+                                  // pData.selectedId = node.id;
+                                  if (pData.valueId) {$('#'+pData.valueId).val(node.id)};
+                                  if (pData.valuePid&&node.pid) {$('#'+pData.valuePid).val(node.pid)};
+                                  layer.close(treePop);
+                                  pData.onDblClick(node);
+                            },
+                            onLoadSuccess : function (node,data) {
+                                pData.data = data;
+                            }
+                      }
+
+                        if (!alreadyRenderTree) {
+                            $('#ul-Tree-'+rdm).tree(treeOpt);
+                            alreadyRenderTree = true;
                         }
-                      });
+
                   });
+
                 };
                 if (myOpt.type =='grid') {
                      _self.click(function() {
                         myOpt.textId = myOpt.textId || this.name;
-                        $pop.popGrid(myOpt);
+                        $pop.popGrid(myOpt,this);
                     });
                 };
 
@@ -1081,7 +1167,7 @@ var $hook = {
     validate: function (formCls) {
         formCls = formCls || ".hk_form";
         if ($(formCls).length > 0) {
-            $(formCls).validate({
+            var $form = $(formCls).validate({
                 errorPlacement: function (lable, element) {
                     $(element).tooltip({content: lable.html(), position: 'right', hideDelay: 0});
                     $(element).tooltip("show");
@@ -1103,7 +1189,8 @@ var $hook = {
                     $.applyIf(params, $(vform).vals());
                     var fn = function (rst) {
                         parent.window._refreshParent = true;
-                        if (data.callback)data.callback(rst);
+                        window.console && console.log(data.callback);
+                        if (data.callback)window[data.callback](rst);
                         if (rst.state) {$util.closePop();};
 
                         if (data.submitClear)$(data.submitClear).val("");
@@ -1112,6 +1199,7 @@ var $hook = {
                     return false;
                 }
             });
+            return $form;
         }
     },
     popGrid: function (cls) {

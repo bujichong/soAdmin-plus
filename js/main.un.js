@@ -39,6 +39,7 @@ require(["pub"],function(){
     if(crumb){
         var crumbArr = crumb.split(":");
         var modId = crumbArr[0] , funcId = crumbArr[1]||'init';
+        window.console && console.log('page执行 app/'+modId+'.js中的'+funcId+'方法');
         require(['app/'+modId],function(mod){
         // require(['app/'+modId],function(mod){
             if(mod){
