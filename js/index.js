@@ -36,12 +36,12 @@ var eyeIndex = {
           var _self = $(this);
           var showMenu=_self.hasClass('intendSide');
           if(showMenu){
-            $(".mainCont").animate({left:'186px'});
+            $(".mainCont").animate({left:'176px'});
             $(".sidebar").animate({marginLeft:'0px'});
             _self.removeClass('intendSide');
           }else{
             $(".mainCont").animate({left:'0px'});
-            $(".sidebar").animate({marginLeft:'-186px'});
+            $(".sidebar").animate({marginLeft:'-176px'});
             _self.addClass('intendSide');
           }
         });

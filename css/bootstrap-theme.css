@@ -59,13 +59,16 @@
 }
 .btn-default:hover,
 .btn-default:focus {
-  background-color: #e6e6e6;
+  background-color: #1FB4E0;
   background-position: 0 -15px;
+  color:#fff;
+  text-shadow: 0 0 0 #fff;
+  border-color: #00A0E9;
 }
 .btn-default:active,
 .btn-default.active {
-  background-color: #e0e0e0;
-  border-color: #dbdbdb;
+/*  background-color: #e0e0e0;
+  border-color: #dbdbdb;*/
 }
 .btn-default:disabled,
 .btn-default[disabled] {

@@ -24,10 +24,10 @@ a:hover{color:#c00;}
 /*.wrapper{min-width: 980px;margin:0 auto;}*/
 .wrapper-popForm{}
 .h2-pageTitle,.h2-normalTitle{
-height:35px;line-height: 35px;padding:0 0 0 40px;margin:0;font-size: 14px;font-weight: bold;background:#f7f7f7 url(../images/icon/i-crumb.png) no-repeat 15px center;box-shadow:1px 1px 2px #ccc;-webkit-box-shadow:1px 1px 2px #ccc;-moz-box-shadow:1px 1px 2px #ccc;*border-bottom: 1px solid #ddd;}
+height:35px;line-height: 35px;padding:0 0 0 40px;margin:0;font-size: 14px;font-weight: bold;background:#f7f7f7 url(../images/icon/i-form.png) no-repeat 15px center;box-shadow:1px 1px 2px #ccc;-webkit-box-shadow:1px 1px 2px #ccc;-moz-box-shadow:1px 1px 2px #ccc;*border-bottom: 1px solid #e5e5e5;}
 .h2-pageTitle{position: fixed;left:0;right: 0;top:0;z-index:5;}
 
-.sideBarBox{position: absolute;left:0px;top:36px;bottom:0px;width:200px;overflow: auto;border-right:1px solid #ddd;}
+.sideBarBox{position: absolute;left:0px;top:36px;bottom:0px;width:200px;overflow: auto;border-right:1px solid #e5e5e5;}
 .mainContBox{position: absolute;left:201px;right:0px;top:36px;bottom:0px;overflow: auto;}
 .sideTreeC{padding:10px;}
 
@@ -68,6 +68,11 @@ height:35px;line-height: 35px;padding:0 0 0 40px;margin:0;font-size: 14px;font-w
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px #ce8483;
 }
 .btn-formS{padding:7px 25px;font-weight: bold;}
+.btn-cancel:hover{
+background-color: #f8f8f8;
+border-color: #dbdbdb;
+color:#222;
+}
 
 /* required inputmark */
 .required{background:url(../images/icon/inputmark.png) no-repeat 100% -998px;}
@@ -81,8 +86,8 @@ height:35px;line-height: 35px;padding:0 0 0 40px;margin:0;font-size: 14px;font-w
 /* easyui repair */
 .ul-userTree .tree-file{background:url(../images/easyui/i-user.png) no-repeat center;}
 .ul-powerTree .tree-file{background:url(../images/easyui/i-key.png) no-repeat ;}
-.combo-panel{border:1px solid #ddd;}
-.combo-arrow{border-left: 1px solid #ddd;}
+.combo-panel{border:1px solid #e5e5e5;}
+.combo-arrow{border-left: 1px solid #e5e5e5;}
 
 .err-404{position: absolute;width:580px;height:280px;top:50%;left:50%;margin:-200px 0 0 -290px;}
 

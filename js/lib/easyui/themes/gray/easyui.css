@@ -1504,10 +1504,11 @@ border-bottom:1px solid #FF7C00;
 .datagrid-toolbar,
 .datagrid-pager {
   height: 34px;
-  padding-top: 5px;
+  /*padding-top: 5px;*/
   background: #E8EDF0;
   border-bottom: 1px solid #fff;
 }
+.datagrid-toolbar{padding-top:5px;}
 
 .datagrid-toolbar{min-height:39px;*height:39px;}
 .datagrid-header,
