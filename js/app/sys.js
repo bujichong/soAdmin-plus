@@ -4,8 +4,8 @@ define(function () {
       $grid.newGrid("#gridBox",{
         // toolbar:'#baseToobar',
         tools:[
-        [{iconCls:'plus',text:'新增',url:'userForm.html',popHeight:400,title:'用户信息-新增'}
-          ,{iconCls:'pencil',btnCls:'warning',text:'修改',onlyOne:true,popHeight:400,popMax:true,url:'userForm.html?id={id}',title:'用户信息-修改',notNull:'请选择你要修改的记录!'}
+        [{iconCls:'plus',text:'新增',url:'userForm.html',popHeight:400,popWidth:560,title:'用户信息-新增'}
+          ,{iconCls:'pencil',btnCls:'warning',text:'修改',onlyOne:true,popHeight:400,popWidth:560,popMax:true,url:'userForm.html?id={id}',title:'用户信息-修改',notNull:'请选择你要修改的记录!'}
           ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true,ajaxMsg:'你确定提交此删除操作吗？'}]
           ,[{iconCls:'refresh',btnCls:'warning',text:'重置密码',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要重置密码的一项或多项！', ajax:true,ajaxMsg:'你确定重置密码为 <strong class="orange">123456</strong> 吗？'}
           ,{iconCls:'repeat',btnCls:'warning',text:'更新状态',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要更新状态的一项或多项！', ajax:true,ajaxMsg:'你确定提交此更新操作吗？'}]

@@ -3,6 +3,9 @@
 
 var v=".js?v="+(new Date()).getTime();
 require.config({
+    map: {
+        '*': {'css': 'css.min'}
+    },
     paths: {
         "my97":"lib/my97/WdatePicker",
         "jquery": "jquery-1.11.3.min",
@@ -19,7 +22,12 @@ require.config({
         "template":"lib/template",
         "echarts":"lib/echarts/echarts",
         "echartsMap":"lib/echarts/echarts-map",
-        "chinaMap":"lib/echarts/china"
+        "chinaMap":"lib/echarts/china",
+        "WebUploader":"lib/webuploader/webuploader.min",
+        "myupload":"lib/webuploader/MyAmdWebUpload",
+        'baidueditor': 'lib/ueditor1.4.3.3-utf8-jsp/myue',
+        'bdlang': 'lib/ueditor1.4.3.3-utf8-jsp/lang/zh-cn/zh-cn',
+        'zeroclipboard': 'lib/ueditor1.4.3.3-utf8-jsp/third-party/zeroclipboard/ZeroClipboard.min'
     },
     shim:{
         "jquery.extend":['jquery'],
@@ -30,7 +38,9 @@ require.config({
         'template': {exports: 'template'},
         "chinaMap":['echarts','echartsMap'],
         "pub":['jquery.extend','easyui.extend','my97','param','bootstrap','layer.min'],
-        "edit":['pub']
+        "edit":['pub'],
+        'baidueditor': {deps: ['lib/ueditor1.4.3.3-utf8-jsp/ueditor.config', 'css!lib/ueditor1.4.3.3-utf8-jsp/themes/default/css/ueditor']},
+        'bdlang':{deps: ['baidueditor']}
     }
 });
 

@@ -1225,7 +1225,7 @@
 border: 0px;
 border-bottom-width: 1px;
 background-color:#e2e2e2;
-height:32px!important;
+height:30px!important;
 line-height:32px!important;
 }
 .tabs li a.tabs-inner:hover {
@@ -1235,10 +1235,10 @@ line-height:32px!important;
 }
 .tabs li.tabs-selected a.tabs-inner,.tabs li.tabs-selected a.tabs-inner:hover{
 color: #fff;
-background: #FF7C00;
-border-bottom:1px solid #FF7C00;
+background: #00A0E9;
+border-bottom:1px solid #00A0E9;
 }
-.tabs{border-color: #FF7C00;}
+.tabs{border-color: #00A0E9;}
 .tabs-p-tool a:hover,
 .tabs li a:hover.tabs-close,
 .tabs-scroller-over {

@@ -90,3 +90,7 @@ a.a-loginOut:hover{background-color:#209BD7;border-left:1px solid #209BD7;}
 .li-sidenav-now .s-sidenav.s-subnav-now,.li-sidenav-now .s-sidenav.s-subnav-now:hover{background-color:#00A0E9;}
 /*.s-sidenav.s-subnav-now{background-color:#0E6390;}*/
 
+.tabs{height:32px!important;}
+.tabs li a.tabs-inner{height:31px!important;padding: 0 25px;}
+.tabs li a.tabs-close{margin-top: -12px;}
+.tabs li.tabs-selected a.tabs-inner{}

@@ -16,7 +16,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input
 .li-abs .s-num{font-size:1.6em;color: #00A0E9;margin-left:12px;}
 
 .area-b{position: relative;margin-top:20px;}
-.h3-list{position: relative;border-bottom:2px solid #ddd;height:32px;line-height: 28px;margin-bottom: 8px;font-weight: bold;}
+.h3-list{position: relative;border-bottom:2px solid #ddd;height:32px;line-height: 28px;margin-bottom: 8px;font-weight: bold;font-size: 14px;}
 .h3-list .s-title{display: -moz-inline-stack;display:inline-block;*display:inline;*zoom:1;border-bottom:2px solid #00A0E9;position: relative;top:2px;padding:0 10px 0 30px;background:url(../images/home/i-4.png) no-repeat 2px center;}
 .h3-list-1 .s-title{background-image: url(../images/home/i-4.png);}
 .h3-list-2 .s-title{background-image: url(../images/home/i-5.png);}
@@ -29,7 +29,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input
 .ul-c .s-info{float: right;}
 
 .area-c{border:1px solid #ddd;margin-top:20px;background-color: #f9f9f9;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;}
-.h3-list-b{height:35px;padding:15px 0 0 15px;font-weight: bold;}
+.h3-list-b{height:35px;padding:15px 0 0 15px;font-weight: bold;font-size: 14px;}
 .ul-d{overflow: hidden;zoom: 1;padding:10px 15px 6px;}
 .ul-d li{overflow: hidden;zoom: 1;height:28px;line-height:28px;}
 .ul-d .s-no{float: left;width:20px;}

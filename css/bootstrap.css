@@ -2386,8 +2386,8 @@ output {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-  cursor: not-allowed;
-  background-color: #eeeeee;
+  /*cursor: not-allowed;*/
+  background-color: #f3f3f3;
   opacity: 1;
 }
 textarea.form-control {
@@ -2762,6 +2762,7 @@ select[multiple].form-group-lg .form-control {
     text-align: right;
     margin-bottom: 0;
     padding-top: 7px;
+    padding-right: 0;
   }
 /*}*/
 .form-horizontal .has-feedback .form-control-feedback {
