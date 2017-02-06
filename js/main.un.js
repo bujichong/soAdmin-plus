@@ -12,6 +12,7 @@ require.config({
         "jquery.extend": "jquery.extend",
         "bootstrap": "bootstrap.min",
         "easyui":"lib/easyui/jquery.easyui.min",
+        "jquery.jdirk": "lib/easyui/jquery.jdirk",
         "easyui.extend":"lib/easyui/jquery.easyui.extend",
         "edit":"lib/easyui/datagrid-cellediting",
         "md5":"lib/md5",
@@ -32,7 +33,8 @@ require.config({
     shim:{
         "jquery.extend":['jquery'],
         "easyui":['jquery'],
-        "easyui.extend":['easyui'],
+        "jquery.jdirk":['jquery'],
+        "easyui.extend":['jquery.jdirk','easyui'],
         "bootstrap":['jquery'],
         "layer.min":['jquery'],
         'template': {exports: 'template'},

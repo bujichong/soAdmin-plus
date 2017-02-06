@@ -1,3 +1,60 @@
+var $math = {
+    mul : function (a, b) {
+        var c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+            c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+            c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+    },
+    add : function (a,b) {
+        var me = this;
+        var c, d, e;
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        return e = Math.pow(10, Math.max(c, d)), (me.mul(a, e) + me.mul(b, e)) / e;
+    },
+    sub : function (a,b) {
+        var me = this;
+        var c, d, e;
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        return e = Math.pow(10, Math.max(c, d)), (me.mul(a, e) - me.mul(b, e)) / e;
+    },
+    div : function (a,b) {
+        var me = this;
+        var c, d, e = 0,
+            f = 0;
+        try {
+            e = a.toString().split(".")[1].length;
+        } catch (g) {}
+        try {
+            f = b.toString().split(".")[1].length;
+        } catch (g) {}
+        return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), me.mul(c / d, Math.pow(10, f - e));
+    }
+}
+
 var $util = {
     data: function (el, attrName) {
         attrName = attrName || 'data-opt';
@@ -558,17 +615,20 @@ var $grid = {
             },opt||{});
             var $btn = $('<span class="btn s-tool'+(singerMode?" s-tool-singer":"")+' btn-default"><b class="glyphicon glyphicon-'+o.iconCls+'"></b> '+o.text+'</span>');
             $btn.click(function () {
+                var _self = $(this);
                 var rows = $gridO.datagrid(o.check?"getChecked":"getSelections");
                 if (o.notNull && rows.length == 0) {
                     if (o.notNull === true) o.notNull = "请选择记录!";
                     layer.msg(o.notNull,{icon:0});
                     // $.sobox.warning(o.notNull);
+                     _self.blur();
                     return;
                 }
                 if (o.onlyOne && rows.length != 1) {
                     if (o.onlyOne === true)o.onlyOne = "请选择需要操作的一条记录!";
                     layer.msg(o.onlyOne,{icon:0});
                     // $.sobox.warning(o.onlyOne);
+                     _self.blur();
                     return;
                 }
                 var url = o.url;
@@ -592,6 +652,7 @@ var $grid = {
                     }
                     if(o.newWin){
                         window.open(url);
+                        _self.blur();
                         return;
                     }
                     if (o.ajax) {
@@ -600,6 +661,7 @@ var $grid = {
                                 $grid.reload(grid);
                             }
                         });
+                        _self.blur();
                     } else {
                         window._refreshParent = false;
                         var areaVal = o.popMax?['100%', '100%']:[(o.popWidth+'px') || '560px',(o.popHeight+'px') || '300px'];
@@ -619,10 +681,15 @@ var $grid = {
                             window.console && console.log(str);
                         }
                         $pop[str] = popIndex;
+                        _self.blur();
                     }
                 }else{
                     if (o.onlyOne) {rows = rows[0]};
-                    if (o.click) {o.click($gridO,rows);return;};
+                    if (o.click) {
+                        o.click($gridO,rows);
+                        _self.blur();
+                        return;
+                    };
                 }
             });
             $par.append($btn);
@@ -654,16 +721,19 @@ var $grid = {
             if (opt == '-')return;
             if (!opt.handler) {
                 opt.handler = function () {
+                    var _self = $(this);
                     var rows = $(grid).datagrid(opt.check?"getChecked":"getSelections");
                     if (opt.notNull && rows.length == 0) {
                         if (opt.notNull === true) opt.notNull = "请选择记录!";
                         layer.msg(opt.notNull,{icon:0});
                         // $.sobox.warning(opt.notNull);
+                        _self.blur();
                         return;
                     }
                     if (opt.onlyOne && rows.length != 1) {
                         if (opt.onlyOne === true)opt.onlyOne = "请选择需要操作的一条记录!";
                         layer.msg(opt.onlyOne,{icon:0});
+                        _self.blur();
                         // $.sobox.warning(opt.onlyOne);
                         return;
                     }
@@ -688,6 +758,7 @@ var $grid = {
                         }
                         if(opt.newWin){
                             window.open(url);
+                            _self.blur();
                             return;
                         }
                         if (opt.ajax) {
@@ -696,6 +767,7 @@ var $grid = {
                                     $grid.reload(grid);
                                 }
                             });
+                            _self.blur();
                         } else {
                             window._refreshParent = false;
                             opt.popWidth = opt.popWidth || 560;
@@ -717,10 +789,14 @@ var $grid = {
                                 window.console && console.log(str);
                             }
                             $pop[str] = popIndex;
+                            _self.blur();
                         }
                     } else {
                         if (opt.onlyOne) {rows = rows[0]};
-                        if (opt.click)opt.click($(grid), rows);
+                        if (opt.click){
+                            opt.click($(grid), rows);
+                            _self.blur();
+                        };
                     }
                 }
             }
@@ -1048,7 +1124,7 @@ var $hook = {
                         url : null,//json url
                         valueId : null,
                         valuePid : null,
-                        // selectedId : null,
+                         selectedId : null,
                         width:400,height:300,
                         title : '请双击选择',
                         value:'text',
@@ -1079,7 +1155,7 @@ var $hook = {
                                 window.console && console.log(node);
                                 if (pData.justLeaf&&node.children!=null) {return false;};
                                   _self.val(node[pData.value]);
-                                  // pData.selectedId = node.id;
+                                   pData.selectedId = node.id;
                                   if (pData.valueId) {$('#'+pData.valueId).val(node.id)};
                                   if (pData.valuePid&&node.pid) {$('#'+pData.valuePid).val(node.pid)};
                                   layer.close(treePop);
@@ -1180,12 +1256,17 @@ var $hook = {
                     var action = $(this.submitButton).attr("action") || vform.action;
                     $(".hk_form .txta,:input").tooltip("destroy");
                     var data = $util.data(vform), params;
+                    window.console && console.log(data);
                     if (typeof (data.params) == 'function') {
                         params = data.params();
                     } else {
                         params = data.params || {};
                     }
                     if ($('.hk_editor').length)DoProcess();
+                    var callSumbit = true;
+                    if (data.beforeCallback) {//提交之前事件函数
+                        callSumbit = window[data.beforeCallback]();
+                    };
                     $.applyIf(params, $(vform).vals());
                     var fn = function (rst) {
                         parent.window._refreshParent = true;
@@ -1195,12 +1276,64 @@ var $hook = {
 
                         if (data.submitClear)$(data.submitClear).val("");
                     }
+                    if (callSumbit) {
                     $ajax.post(action, params, msg).done(fn);
+                    };
                     return false;
                 }
             });
             return $form;
         }
+    },
+    easyValidate : function (formCls) {
+        formCls = formCls || ".easy-form";
+        if ($(formCls).length > 0) {
+            $(formCls).each(function(i,v) {
+                var _self = $(this);
+                window.console && console.log(url);
+                $(formCls).form({
+                    // url : url,
+                    onSubmit : function () {
+                        var validate = _self.form('validate');
+                       if (validate) {
+                            var data = $util.data(_self), params;
+                            var action = _self.attr('action');
+                            window.console && console.log(data);
+                            if (typeof (data.params) == 'function') {
+                                params = data.params();
+                            } else {
+                                params = data.params || {};
+                            }
+                            if ($('.hk_editor').length)DoProcess();
+                            var callSumbit = true;
+                            if (data.beforeCallback) {//提交之前事件函数
+                                callSumbit = window[data.beforeCallback]();
+                            };
+                            $.applyIf(params, $(vform).vals());
+                            var fn = function (rst) {
+                                parent.window._refreshParent = true;
+                                window.console && console.log(data.callback);
+                                if (data.callback)window[data.callback](rst);
+                                if (rst.state) {$util.closePop();};
+
+                                if (data.submitClear)$(data.submitClear).val("");
+                            }
+                            if (callSumbit) {
+                            $ajax.post(action, params, msg).done(fn);
+                            };
+                       };
+
+                        return false;
+                    },
+                    success:function(data){
+                        window.console && console.log(data);
+                    }
+                });
+            });
+
+            // return $form;
+        }
+
     },
     popGrid: function (cls) {
         cls = cls || '.hk_popGrid';
@@ -1208,7 +1341,7 @@ var $hook = {
             $(cls).click(function () {
                 var data = $util.data(this);
                 data.textId = data.textId || this.name;
-                $pop.popGrid(data);
+                $pop.popGrid(data,this);
             });
         }
     },
@@ -1258,6 +1391,10 @@ var $hook = {
 };
 
 if ($.validator) {
+
+    $.validator.addMethod("username", function (value, element) {
+        return value.match(/^[0-9a-zA-Z_]{1,}$/);
+    }, "只能输入字母、数字、下划线");
     $.validator.addMethod("cn", function (value, element) {
         return value.match(/^[\u0391-\uFFE5]+$/);
     }, "请输入中文");
@@ -1268,19 +1405,35 @@ if ($.validator) {
         return value.match(/^[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]$/);
     }, "请输入合法的IP");
     $.validator.addMethod("pNumber", function (value, element) {
+        if (value) {
         return value.match(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/);
+        };
+        return true;
     }, "请输入一个正数");
-    $.validator.addMethod("pInt", function (value, element) {
-        return value.match(/^[1-9]*[1-9][0-9]*$/);
+    $.validator.addMethod("pInt", function (value, element) {//非负整数
+        if (value) {
+            return value.match(/^(0|[1-9]\d*)$/);
+        };
+        return true;
     }, "请输入一个正整数");
     $.validator.addMethod("int", function (value, element) {
-        return value.match(/^-?\d+$/);
+        if (value) {
+            return value.match(/^-?\d+$/);
+        };
+        return true;
     }, "请输入一个整数");
+    $.validator.addMethod("diymonth", function (value, element) {
+        if (value) {
+            return value.match(/^[0-9]+(\.[0-9]{1})?$/);
+        };
+        return true;
+    }, "月数为正整数或一位小数");
 }
 
 $(function () {
     $hook.widget();//存放比较零碎的
     $hook.validate();
+    $hook.easyValidate();
     $hook.search();
     $hook.popGrid();
     $hook.popTree();
