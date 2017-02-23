@@ -1290,12 +1290,13 @@ var $hook = {
         if ($(formCls).length > 0) {
             $(formCls).each(function(i,v) {
                 var _self = $(this);
-                window.console && console.log(url);
+                // window.console && console.log(url);
                 $(formCls).form({
                     // url : url,
                     onSubmit : function () {
                         var validate = _self.form('validate');
                        if (validate) {
+                            var msg = $p.submitTip;
                             var data = $util.data(_self), params;
                             var action = _self.attr('action');
                             window.console && console.log(data);
@@ -1314,7 +1315,7 @@ var $hook = {
                                 parent.window._refreshParent = true;
                                 window.console && console.log(data.callback);
                                 if (data.callback)window[data.callback](rst);
-                                if (rst.state) {$util.closePop();};
+                                if (rst.state&&(!data.unclose)) {$util.closePop();};
 
                                 if (data.submitClear)$(data.submitClear).val("");
                             }

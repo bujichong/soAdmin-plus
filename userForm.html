@@ -18,35 +18,35 @@
 <div class="wrapper-popForm">
     <!-- <h3 class="h3-form"><span class="span-title">筹建医院-修改</span></h3> -->
     <!-- <form class="soForm hk_form pad-t15"> -->
-<form class="form-horizontal hk_form pad-t15 pad-l20 pad-r30" role="form" method="post" data-opt="" id="vform" action="json/true.js">
+<form class="form-horizontal easy-form pad-t15 pad-l20 pad-r30" role="form" method="post" data-opt="" id="vform" action="json/true.js">
 
         <fieldset>
            <div class="form-group">
               <label class="col-xs-2 control-label">用户名：</label>
               <div class="col-xs-4">
-                 <input class="form-control required" type="text" name="userName" value="" maxlength="20" placeholder="用户名" />
+                 <input class="form-control easyui-validatebox required" type="text" name="userName" value="" maxlength="20" placeholder="用户名" data-options="required:true,invalidMessage:'请输入用户名'" />
               </div>
               <label class="col-xs-2 control-label">姓名：</label>
               <div class="col-xs-4">
-                 <input class="form-control required" type="text" name="realName" value="" maxlength="20" placeholder="姓名" />
+                 <input class="form-control easyui-validatebox required" type="text" name="realName" value="" maxlength="20" placeholder="姓名" data-options="required:true,invalidMessage:'请输入姓名'" />
               </div>
            </div>
 
            <div class="form-group">
               <label class="col-xs-2 control-label">密码：</label>
               <div class="col-xs-4">
-                 <input class="form-control required"  id="password" type="password" name="password" value="" maxlength="20" placeholder="默认密码123456" />
+                 <input class="form-control easyui-validatebox required"  id="password" type="password" name="password" value="" maxlength="20" placeholder="默认密码123456" data-options="required:true,invalidMessage:'请输入密码'" />
               </div>
               <label class="col-xs-2 control-label">确认密码：</label>
               <div class="col-xs-4">
-                 <input class="form-control required {equalTo:'#password'}" type="password" name="repassword" value="" maxlength="20" placeholder="再输入一次密码" />
+                 <input class="form-control easyui-validatebox required" type="password" name="repassword" value="" maxlength="20" placeholder="再一次输入密码" data-options="required:true,validType:'equalTo[\'#password\']',invalidMessage:'两次密码不一致', missingMessage:'请再一次输入密码'" />
               </div>
            </div>
 
            <div class="form-group">
               <label class="col-xs-2 control-label">电话号码：</label>
               <div class="col-xs-4">
-                 <input class="form-control required" type="text" name="mobile" value="" maxlength="20" placeholder="电话号码" />
+                 <input class="form-control easyui-validatebox required" type="text" name="mobile" value="" maxlength="20" placeholder="电话号码" />
               </div>
               <label class="col-xs-2 control-label">性别：</label>
               <div class="col-xs-4">
@@ -58,12 +58,12 @@
            <div class="form-group">
               <label class="col-xs-2 control-label">Email：</label>
               <div class="col-xs-4">
-                 <input class="form-control required email" type="text" name="mobile" value="" maxlength="20" placeholder="请输入email地址" />
+                 <input class="form-control easyui-validatebox required email" type="text" name="mobile" value="" maxlength="20" placeholder="请输入email地址" />
               </div>
               <label class="col-xs-2 control-label">关联组织：</label>
               <div class="col-xs-4">
                 <input type="hidden" id="userGroupId" class="txt" name="userGroupId" />
-                 <input class="form-control hk_pop required" data-opt="{type:'tree',url:'json/groupTree.js',title:false,valueId:'userGroupId',justLeaf:true}" type="text" name="name" value="" maxlength="20" placeholder="请选择关联组织" readonly="readonly" />
+                 <input class="form-control easyui-validatebox hk_pop required" data-opt="{type:'tree',url:'json/groupTree.js',title:false,valueId:'userGroupId',justLeaf:true}" type="text" name="name" value="" maxlength="20" placeholder="请选择关联组织" readonly="readonly" />
                   <!-- <input class="form-control required hk_drop" type="text" name="orgId" url="json/dropDept.js" /> -->
 <!--                 <select name="orgId" class="form-control required">
                   <option value="">请选择...</option>

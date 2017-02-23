@@ -200,6 +200,26 @@ $.fn.combotree.defaults.loadFilter = function(data, parent) {
                 validator: function (value) { return $.string.isZipCode(value); },
                 message: "输入的内容必须是邮政编码(中国)格式."
             },
+            //  普通用户名
+            username: {
+                validator: function (value) { return  value.match(/^[0-9a-zA-Z_]{1,}$/); },
+                message: "只能输入字母、数字、下划线"
+            },
+            // 非负数
+            pNumber: {
+                validator: function (value) { return value.match(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/); },
+                message: "请输入一个正数"
+            },
+            // 正整数
+            pInt: {
+                validator: function (value) { return value.match(/^(0|[1-9]\d*)$/); },
+                message: "请输入一个正整数"
+            },
+            // 整数
+            int: {
+                validator: function (value) { return value.match(/^-?\d+$/);},
+                message: "请输入一个整数"
+            },
             //  必须包含中文汉字
             existChinese: {
                 validator: function (value) { return $.string.existChinese(value); },
@@ -310,6 +330,13 @@ $.fn.combotree.defaults.loadFilter = function(data, parent) {
                     return (/^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,16}$/.test(str));
                 },
                 message: "输入的内容必须是安全的密码字符(由字符、数字或特殊字符(~!@#$%^&*.)组成，6 至 16 位)格式."
+            },
+            //必须和某个字段相等
+            equalTo: {
+                validator: function (value, param) {
+                    return $(param[0]).val() == value;
+                },
+                message: '字段不匹配'
             },
             //  输入的字符必须是指定的内容相同
             equals: {
