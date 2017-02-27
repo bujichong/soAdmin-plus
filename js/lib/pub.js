@@ -1244,6 +1244,9 @@ var $hook = {
         formCls = formCls || ".hk_form";
         if ($(formCls).length > 0) {
             var $form = $(formCls).validate({
+                focusInvalid: true,
+                // debug : true,
+                onkeyup: true,
                 errorPlacement: function (lable, element) {
                     $(element).tooltip({content: lable.html(), position: 'right', hideDelay: 0});
                     $(element).tooltip("show");
@@ -1262,7 +1265,21 @@ var $hook = {
                     } else {
                         params = data.params || {};
                     }
-                    if ($('.hk_editor').length)DoProcess();
+                    if ($('.hk_editor_required').length) {//富编辑框必填验证
+                        var state = true;
+                      $('.hk_editor_required').each(function () {
+                        var ueName = $(this).attr('class').match(/editorkey_.+/g)||['editorkey_eyeUe'];
+                        ueName = ueName[0].split(/ |_/)[1];
+                        // window.console && console.log(ueName,window[ueName].hasContents());
+                        if (window[ueName].hasContents()) {
+                            $('.editorkey_'+ueName).tooltip("destroy");
+                        }else{
+                            $('.editorkey_'+ueName).tooltip({content: '内容为必填！', position: 'right', hideDelay: 0});
+                            state =false;
+                        };
+                      });
+                      if (!state) { return false;};
+                    };
                     var callSumbit = true;
                     if (data.beforeCallback) {//提交之前事件函数
                         callSumbit = window[data.beforeCallback]();

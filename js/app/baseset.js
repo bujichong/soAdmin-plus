@@ -1,8 +1,7 @@
-define(['baidueditor', 'zeroclipboard', 'bdlang'], function(UE, zcl){
+define(['lib/editor'] ,function(editor){
     var back = {
         init : function () {
-            window.ZeroClipboard = zcl;
-            var ue = UE.getEditor('editor');
+            editor();
         }
     }
     return back;
