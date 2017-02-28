@@ -598,7 +598,7 @@ var $grid = {
             //iconCls:'icon-add',text:'新增',url:'form.html',noMax: true,popHeight:350,title:'用户信息-新增'
             var o= $.extend({
                 iconCls :'plus',//默认按钮图标
-                btnCls : 'primary',//默认按钮类型
+                btnCls : 'default',//默认按钮类型
                 text : '新增',//按钮文本
                 url : null,//请求地址
                 popMax : false,//是否最大化
@@ -613,7 +613,7 @@ var $grid = {
                 ajax : false,//ajax事件
                 click : function () {}
             },opt||{});
-            var $btn = $('<span class="btn s-tool'+(singerMode?" s-tool-singer":"")+' btn-default"><b class="glyphicon glyphicon-'+o.iconCls+'"></b> '+o.text+'</span>');
+            var $btn = $('<span class="btn s-tool'+(singerMode?" s-tool-singer":"")+' btn-'+o.btnCls+'"><b class="glyphicon glyphicon-'+o.iconCls+'"></b> '+o.text+'</span>');
             $btn.click(function () {
                 var _self = $(this);
                 var rows = $gridO.datagrid(o.check?"getChecked":"getSelections");
@@ -1060,6 +1060,19 @@ var $hook = {
                 $util.closePop();
             });
         }
+        if ($('.formA').length) {//回车替代tab事件
+            var $input = $('.formA').find(':input');
+            $input.eq(0).focus();
+            $input.keydown(function(e) {
+                if (e.keyCode == 13) {
+                    if ($(this).hasClass('btn')) {return;};
+                    var ix = $input.index(this);
+                    // window.console && console.log(ix);
+                    $input.eq(ix+1).focus();
+                    return false;
+                };
+            });
+        };
         if ($(".hk_form .btn-closePop").length) {
             $(".hk_form .btn-closePop").click(function () {
                 $util.closePop();
