@@ -92,15 +92,15 @@ define(['myupload'],function () {
       }
 
 
+
     //上传方式3
         var kupload3 = $(".uploadS").powerWebUpload({
-          auto: false,
           fileNumLimit:2,//文件个数
           btnStyle : true,
           uploadBtnId : 'btn-upload-1',
           upOpt :{
-            server : '/json/upload.js',
-            deleteServer :ctx+'/knowledge/deleteFile.jhtml'
+            server : '/json/upload.js'
+            // ,deleteServer :ctx+'/knowledge/deleteFile.jhtml'
           }
           ,beforeUpload : function (file) {
           }
