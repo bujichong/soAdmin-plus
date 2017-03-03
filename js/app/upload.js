@@ -52,10 +52,10 @@ define(['myupload'],function () {
               deleteServer :ctx+'/workItemInfo/deleteFile.jhtml'
           }
         ,beforeUpload : function (file) {
-            kupload.options.formData={
+            kupload2.options.formData={
               itemId : $('#itemId').val()
             }
-            window.console && console.log(kupload.options.formData);
+            window.console && console.log(kupload2.options.formData);
               //return $hook.validate().form();//返回表单验证状态
             }
             ,uploadSuccess : function (file,req) {
