@@ -1,0 +1,1 @@
+{"tip":0,"state":true,"msg":"","fileUrl":"http://www.eyebasesys.com/uploadDemo/demo.jpg"}

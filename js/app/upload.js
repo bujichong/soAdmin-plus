@@ -44,7 +44,7 @@ define(['myupload'],function () {
         fileNameUUID : [],
         size : []
       };
-      var kupload =$("#uploader2").powerWebUpload({
+      var kupload2 =$("#uploader2").powerWebUpload({
           auto: true,fileNumLimit:2,
         // fileKey : 'filePath',
           upOpt :{
@@ -90,6 +90,29 @@ define(['myupload'],function () {
       window.afterSubmitMessage =  function () {
         window.location.reload();
       }
+
+
+    //上传方式3
+        var kupload3 = $(".uploadS").powerWebUpload({
+          auto: false,
+          fileNumLimit:2,//文件个数
+          btnStyle : true,
+          uploadBtnId : 'btn-upload-1',
+          upOpt :{
+            server : '/json/upload.js',
+            deleteServer :ctx+'/knowledge/deleteFile.jhtml'
+          }
+          ,beforeUpload : function (file) {
+          }
+          ,uploadSuccess : function (file,response) {
+            window.console && console.log(file,response);
+            $('#txt-uploadFlie-1').val(response.fileUrl);
+          },
+          uploadFinished : function () {
+          }
+        });
+
+
     }
   };
   return back;

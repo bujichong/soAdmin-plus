@@ -613,7 +613,7 @@ var $grid = {
                 ajax : false,//ajax事件
                 click : function () {}
             },opt||{});
-            var $btn = $('<span class="btn s-tool'+(singerMode?" s-tool-singer":"")+' btn-'+o.btnCls+'"><b class="glyphicon glyphicon-'+o.iconCls+'"></b> '+o.text+'</span>');
+            var $btn = $('<span class="btn s-tool'+(singerMode?" s-tool-singer":"")+' btn-default"><b class="glyphicon glyphicon-'+o.iconCls+'"></b> '+o.text+'</span>');
             $btn.click(function () {
                 var _self = $(this);
                 var rows = $gridO.datagrid(o.check?"getChecked":"getSelections");
@@ -813,7 +813,7 @@ var $grid = {
                 target: box,
                 btn: [{
                     text: '确定', callback: function () {
-                        var ps = $(box).vals();
+                        var ps = $(box).serializeObject();
                         for (var i = 0; i < fields.length; i++) {
                             ps[fields[i]] = row[fields[i]];
                         }
@@ -838,23 +838,33 @@ var $pop = {
             alert("请配置表格数据参数gridId");
             return;
         }
-        var data = opt || {}
-            , gridId = data.gridId || 'grid_' + data.code.replace(/[\^@]/g, '')
+        var data = opt || {};
+        data.gridCfg = data.gridCfg ||{};
+        var gridId = data.gridId || 'grid_' + data.code.replace(/[\^@]/g, '')
             , url = data.url || "/sys/widget/grid.htm?_code=" + encodeURIComponent(data.code)
-            , init = $('#' + gridId).length > 0
-            , muti = data.gridCfg && !data.gridCfg.singleSelect;
-
+            , init = $('#' + gridId).length > 0;
+            data.gridCfg.singleSelect = data.gridCfg.singleSelect  || !data.muti;
+        var muti = !data.gridCfg.singleSelect;
+            window.console && console.log(muti);
         if (init && $('#pop_' + gridId).length == 0) alert("请另外指定gridId," + gridId + "已存在!");
         if (!init) {
             var searchName = data.searchName || 'searchValue';
             var searchLabel = data.searchLabel || '';
-            var boxTpl = "<div id='pop_{gridId}' style='display:none'><p class='p-tableHead'><span class='s-ser-item'><input class='txt w200' type='text' value='' name='"+searchName+"' placeholder='"+searchLabel+"' required='true'/></span><span><input type='button' class='btn btn-submit fnSearch' value='查 询' /></span><input type='button' class='btn btn-submit fnSure' value='确 定' /></span></p><div class='pad-l10 pad-r10 pad-b5'><div id='{gridId}'></div></div></div>";
+            var boxTpl = "<div id='pop_{gridId}' style='display:none'>"+
+            "<div class='form-inline popGridHead'>"+
+            "<div class='form-group'><input type='text' class='form-control' name='"+searchName+"' placeholder='"+searchLabel+"'></div>"+
+            "<button type='button' class='btn btn-info fnSearch'>查 询</button>"+
+            "<button type='button' class='btn btn-warning fnSure"+(muti?'':' none')+"'>确 定</button>"+
+                // "<span><input type='button' class='btn btn-submit fnSearch' value='查 询' /></span>"+
+                // "<input type='button' class='btn btn-submit fnSure' value='确 定' />"+
+            "</div>"+
+            "<div class='pad-l10 pad-r10 pad-b5'><div id='{gridId}'></div></div></div>";
             $('body').append($util.format(boxTpl, {gridId: gridId}));
         }
 
         var boxOpt = {
             type :1,
-            title: '请双击选择',
+            title: muti?'选择后点击确定按钮':'请双击选择行',
             area : ['500px','476px'],
             content: $('#pop_' + gridId)
         };
@@ -870,7 +880,7 @@ var $pop = {
         if (!init) {
             var valueId = data.valueId, textId = data.textId
             ,valueVal = data.valueVal||'id', textVal = data.textVal||'text'
-                , gridCfg = {height: (boxOpt.height - 94), width: '100%'};
+                , gridCfg = {height: (boxOpt.height - 85), width: '100%'};
             $.extend(true, gridCfg, data.gridCfg || {});
             gridCfg.columns = gridCfg.columns || data.cols;
             if (!gridCfg.columns && data.code) {
@@ -885,18 +895,23 @@ var $pop = {
                 alert("请配置表格列信息!");
                 return;
             }
-	    gridCfg.fitColumns = opt.fitCol || true;
+	    gridCfg.fitColumns = (opt.fitCol?opt.fitCol:true);
             gridCfg.onDblClickRow = function (index, row) {
                 window.console && console.log(textId,valueId,row);
                 if (valueId)$('#' + valueId).val(row[valueVal]);
                 if (textId)$('#' + textId).val(row[textVal]);
                 if (boxOpt.onOk)boxOpt.onOk([row]);
                 layer.close($pop[gridId]);
+                if(data.values){
+                    $.each(data.values,function (key,val) {
+                        $('#'+key).val(row[val]);
+                    });
+                }
                 // $pop[gridId].removePop();
             }
             $grid.newGrid('#' + gridId, gridCfg);
             $('.fnSearch', '#pop_' + gridId).click(function () {
-                var ps = $('#pop_' + gridId).vals();
+                var ps = $('#pop_' + gridId).serializeObject();
                 $grid.load('#' + gridId, ps);
             });
             if (muti) {
@@ -1029,7 +1044,7 @@ var $hook = {
                 if (formId != null && !$(formId).valid()) {
                     return;
                 }
-                var scope = data.scope, param = $(scope).vals(), gridId = data.grid;
+                var scope = data.scope, param = $(scope).serializeObject(), gridId = data.grid;
                 if (data.tab) {
                     var sli = $('li.tabs-selected', data.tab), inx = $('.tabs li', data.tab).index(sli);
                     gridId += (inx + 1);
@@ -1138,7 +1153,7 @@ var $hook = {
                         valueId : null,
                         valuePid : null,
                          selectedId : null,
-                        width:400,height:300,
+                        width:'400px',height:'300px',
                         title : '请双击选择',
                         value:'text',
                         justLeaf: false,
@@ -1153,7 +1168,7 @@ var $hook = {
                     treePop = layer.open({
                         type: 1,
                         content: $('#popTreeP-'+rdm),
-                        area : [pData.width+'px',pData.height+'px'],
+                        area : [pData.width,pData.height],
                         title :pData.title,
                         btn:null
                       });
@@ -1297,7 +1312,7 @@ var $hook = {
                     if (data.beforeCallback) {//提交之前事件函数
                         callSumbit = window[data.beforeCallback]();
                     };
-                    $.applyIf(params, $(vform).vals());
+                    $.applyIf(params, $(vform).serializeObject());
                     var fn = function (rst) {
                         parent.window._refreshParent = true;
                         window.console && console.log(data.callback);
@@ -1340,7 +1355,7 @@ var $hook = {
                             if (data.beforeCallback) {//提交之前事件函数
                                 callSumbit = window[data.beforeCallback]();
                             };
-                            $.applyIf(params, $(vform).vals());
+                            $.applyIf(params, $(vform).serializeObject());
                             var fn = function (rst) {
                                 parent.window._refreshParent = true;
                                 window.console && console.log(data.callback);

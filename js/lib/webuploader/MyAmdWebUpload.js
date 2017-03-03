@@ -39,6 +39,10 @@ return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
             hiddenInputId: "uploadifyHiddenInputId", // input hidden id
             fileKey : 'filePath',
             fileNameMaxLength : 40,
+            btnStyle : false,
+            btnProcessShow : false,
+            uploadBtnId : null,
+            uploadInput : null,
             beforeUpload : function (file) {},//当file加入队列之前执行
             uploadComplete: function (file) { }, // 当file上传后执行的回调函数
             uploadSuccess: function (file,response) { },// 每上传file成功后执行的回调函数
@@ -55,23 +59,29 @@ return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         var hdFileData = $("#" + opts.hiddenInputId);
         var target = $(item);//容器
         var pickerid = "";
-        if (typeof guidGenerator36 != 'undefined')//给一个唯一ID
-            pickerid = guidGenerator36();
-        else
-            pickerid = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        if (opts.btnStyle) {
+            opts.auto = true;
+            pickerid = opts.uploadBtnId;
+        }else{
+            if (typeof guidGenerator36 != 'undefined'){//给一个唯一ID
+                pickerid = guidGenerator36();
+            }else{
+                pickerid = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            }
+        };
         var uploaderStrdiv = '<div class="webuploader">'
         //debugger
         if (opts.auto) {
             uploaderStrdiv =
             '<span class="btns">' +
-            '<span id="' + pickerid + '">选择上传文件</span>' +
+            (opts.btnStyle?'':'<span id="' + pickerid + '">选择上传文件</span>') +
             '</span>'+
             '<span id="Uploadthelist" class="uploader-list"></span>';
 
         } else {
             uploaderStrdiv =
             '<div class="uploadBtns">' +
-            '<span id="' + pickerid + '">选择文件</span>' +
+            (opts.btnStyle?'':'<span id="' + pickerid + '">选择文件</span>') +
             '<span class="webuploadbtn">开始上传</span>' +
             '<div  class="uploader-list"></div>' +
             '</div>'
@@ -89,6 +99,8 @@ return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         var jsonData = {
             fileList: []
         };
+
+        opts.btnStyle&&!opts.btnProcessShow&&$list.hide();
 
         var webuploaderoptions = $.extend({
             // swf文件路径

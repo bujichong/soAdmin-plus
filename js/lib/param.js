@@ -18,6 +18,11 @@ var $cols={
 		{title:'联系人',field:'linkman',width:80},
 		{title:'联系方式',field:'linkway',width:100}
 	]],
+	userSite : [[
+	{title:'id',field:'id',hidden:true},
+	{title:'网站名称',field:'name',width:120},
+	{title:'网站地址',field:'url',width:240}
+	]],
     GridGoods:[[
          {checkbox:true,field:'chk'}
         ,{title:'商品名称',field:'text'}
