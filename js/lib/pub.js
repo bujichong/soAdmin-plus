@@ -201,15 +201,25 @@ var $util = {
           merges[ix].rowspan = span;
           window.console && console.log('merges 数组：',merges);
 
-      for(var i=0; i<merges.length; i++){
-            if(merges[i].rowspan>1){
-              $(grid).datagrid('mergeCells',{
-                index: merges[i].index,
-                field: bStr,
-                rowspan: merges[i].rowspan
-              });
+          for(var i=0; i<merges.length; i++){
+                if(merges[i].rowspan>1){
+                  if (bStr instanceof Array) {//如果有多个字段，为数组
+                      $.each(bStr,function(j,v){
+                        $(grid).datagrid('mergeCells',{
+                          index: merges[i].index,
+                          field: v,
+                          rowspan: merges[i].rowspan
+                        });
+                      });
+                  }else{//单个字段，字符串
+                    $(grid).datagrid('mergeCells',{
+                      index: merges[i].index,
+                      field: bStr,
+                      rowspan: merges[i].rowspan
+                    });
+                  };
+                }
             }
-        }
         };
     },
     closeSoPop: function (fn) {
