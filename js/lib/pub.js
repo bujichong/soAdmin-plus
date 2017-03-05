@@ -1413,57 +1413,6 @@ var $hook = {
             });
         };
     },
-    easyValidate2 : function (formCls) {
-        formCls = formCls || ".easy-form";
-        if ($(formCls).length > 0) {
-            $(formCls).each(function(i,v) {
-                var _self = $(this);
-                // window.console && console.log(url);
-                $(formCls).form({
-                    // url : url,
-                    onSubmit : function () {
-                        var validate = _self.form('validate');
-                       if (validate) {
-                            var msg = $p.submitTip;
-                            var data = $util.data(_self), params;
-                            var action = _self.attr('action');
-                            window.console && console.log(data);
-                            if (typeof (data.params) == 'function') {
-                                params = data.params();
-                            } else {
-                                params = data.params || {};
-                            }
-                            if ($('.hk_editor').length)DoProcess();
-                            var callSumbit = true;
-                            if (data.beforeCallback) {//提交之前事件函数
-                                callSumbit = window[data.beforeCallback]();
-                            };
-                            $.applyIf(params, $(vform).serializeObject());
-                            var fn = function (rst) {
-                                parent.window._refreshParent = true;
-                                window.console && console.log(data.callback);
-                                if (data.callback)window[data.callback](rst);
-                                if (rst.state&&(!data.unclose)) {$util.closePop();};
-
-                                if (data.submitClear)$(data.submitClear).val("");
-                            }
-                            if (callSumbit) {
-                            $ajax.post(action, params, msg).done(fn);
-                            };
-                       };
-
-                        return false;
-                    },
-                    success:function(data){
-                        window.console && console.log(data);
-                    }
-                });
-            });
-
-            // return $form;
-        }
-
-    },
     popGrid: function (cls) {
         cls = cls || '.hk_popGrid';
         if ($(cls).length) {
