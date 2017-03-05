@@ -18,7 +18,7 @@ var minJsTask = {
         baseUrl: paths.js,
         name: 'main.un',
         out: paths.js + 'main.js',
-        optimize: 'uglify2',
+        optimize: 'none',
         mainConfigFile: paths.js + 'config.require.js',
         watchFile: [paths.js + '*.js'] //需要监控变化的js文件
     }

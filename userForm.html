@@ -24,8 +24,8 @@
            <div class="form-group">
               <label class="col-xs-2 control-label">用户名：</label>
               <div class="col-xs-4">
-                 <input class="form-control required" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" />
-                 <!-- <input class="form-control required {remote:'json/remote.js?proUserName=myadmin',messages:{remote:'用户名已存在'}}" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" /> -->
+                 <!-- <input class="form-control required" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" /> -->
+                 <input class="form-control required {remote:'json/remote.js?proUserName=myadmin',messages:{remote:'用户名已存在'}}" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" />
               </div>
               <label class="col-xs-2 control-label">姓名：</label>
               <div class="col-xs-4">
@@ -111,8 +111,6 @@
         </p>
     </form>
 </div>
-
-
 
 <script src="js/require.js" data-main="js/main.un"></script>
 </body>
