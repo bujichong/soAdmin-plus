@@ -4,6 +4,7 @@ var eyeIndex = {
         window.console && console.log('index js init');
         // me.exScreen();//全屏
         me.exSide();//收缩侧边栏
+        me.exSideInOther();//调用方法可以在子页面收缩侧边栏
         me.setIframeH();//设置iframeH
         me.sideSlide();//侧边栏点击展开
         me.sideNavE();//侧边导航点击链接事件
@@ -30,6 +31,19 @@ var eyeIndex = {
           return false;
         });
 
+      },
+      exSideInOther: function () {
+        window.indexInSide =  function () {
+            $(".mainCont").animate({left:'0px'});
+            $(".sidebar").animate({marginLeft:'-188px'});
+        }
+        window.indexExSide=  function () {
+            $(".mainCont").animate({left:'188px'});
+            $(".sidebar").animate({marginLeft:'0px'});
+            $('.li-sidenav').removeClass('li-sidenav-now').eq(0).addClass('li-sidenav-now');
+            $('.s-sidenav').removeClass('s-sidenav-now');
+            $('.s-subnav').removeClass('s-subnav-now');
+        }
       },
       exSide : function () {
         $('.s-extendSide').click(function() {

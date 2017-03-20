@@ -544,6 +544,11 @@ var $grid = {
                         return {'class': 'x-editor'};
                     }
                 }
+                if(col.titletip){
+                    col.formatter=function(r){
+                       return '<span title="'+r+'">'+r+'</span>';
+                     }
+                }
             });
         }
         console.log("初始化" + grid, gridCfg);
@@ -621,6 +626,8 @@ var $grid = {
                 onlyOne : false,//只能选择一行
                 newWin : false,//在新窗口打开
                 ajax : false,//ajax事件
+                endBack : function () {},
+                ajaxBack : function (data) {},
                 click : function () {}
             },opt||{});
             var $btn = $('<span class="btn s-tool'+(singerMode?" s-tool-singer":"")+' btn-default"><b class="glyphicon glyphicon-'+o.iconCls+'"></b> '+o.text+'</span>');
@@ -667,6 +674,7 @@ var $grid = {
                     }
                     if (o.ajax) {
                         $ajax.post(url, {}, o.ajaxMsg).done(function (rst) {
+                            o.ajaxBack(rst);
                             if (rst.state) {
                                 $grid.reload(grid);
                             }
@@ -681,7 +689,10 @@ var $grid = {
                           content:url,
                           area :areaVal,
                           end : function () {
-                              if (window._refreshParent)$grid.reload(grid);
+                              if (window._refreshParent){
+                                $grid.reload(grid);
+                                o.endBack();
+                              }
                           }
                         });
                         // window.console && console.log(popIndex);
@@ -1117,6 +1128,12 @@ var $hook = {
             });
         }
 
+        if ($('.drop').length) {
+            $('.drop').each(function () {
+                var v = $(this).attr('rel');
+                if (v) {$(this).val(v);};
+            })
+        };
 
         if ($('.required').length) {
             $('.required').each(function () {
@@ -1282,9 +1299,10 @@ var $hook = {
         formCls = formCls || ".hk_form";
         if ($(formCls).length > 0) {
             var $form = $(formCls).validate({
-                focusInvalid: true,
+                // focusInvalid: true,
                 // debug : true,
-                onkeyup: true,
+                // onkeyup: true,
+                // onfocusout: false,
                 errorPlacement: function (lable, element) {
                     $(element).tooltip({content: lable.html(), position: 'right', hideDelay: 0});
                     $(element).tooltip("show");

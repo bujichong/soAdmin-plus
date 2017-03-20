@@ -104,7 +104,7 @@ define(function () {
       });
     },
     userRole : function () {
-      $('#ul-roleTree').tree({
+/*      $('#ul-roleTree').tree({
         animate : true,
         url : 'json/roleTree.js',
         // onlyLeafCheck : true,
@@ -114,10 +114,26 @@ define(function () {
         onClick : function (node) {
           window.console && console.log(node);
         }
+      });*/
+
+      $grid.newGrid("#gridBox",{
+        rownumbers : false,
+        // singleSelect : false,
+        checkOnSelect : false,
+        selectOnCheck : false,
+        columns:[[
+           {title:'id',field:'id',checkbox:true}
+          ,{title:'角色名称',field:'name',width:100}
+          ,{title:'描述',field:'desc',width:120}
+          ,{title:'创建时间',field:'createTime',width:120}
+        ]],
+        height:376,
+        pagination : false,
+        url:'json/role.js'
       });
 
       $('.btn-submit').click(function () {
-        var checked = $('#ul-roleTree').tree('getChecked');
+        var checked = $('#gridBox').datagrid('getChecked');
         var chkIdArr = [];
         $.each(checked,function (i,v) {
           if (!v.children) {chkIdArr.push(v.id)};
@@ -149,9 +165,16 @@ define(function () {
       $grid.newGrid("#gridBox",{
         tools:[
           [{iconCls:'plus',text:'新增',url:'groupAdd.html',popHeight:260,popWidth:450,title:'组织管理-新增'}
-          ,{iconCls:'pencil',btnCls:'warning',text:'修改',onlyOne:true,popHeight:330,popWidth:450,url:'groupEdit.html?id={id}',title:'组织管理-修改',notNull:'请选择你要修改的记录!'}
-          ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true}]
-          ,[{iconCls:'user',btnCls:'warning',text:'分配角色',url:'userRole.html?id={id}',onlyOne:true,popHeight:380,popWidth:360,title:'组织管理-分配角色',notNull:'请选择你要分配角色的行！'}]
+          ,{iconCls:'pencil',btnCls:'warning',text:'修改',onlyOne:true,popHeight:330,popWidth:450,url:'groupEdit.html?id={id}',title:'组织管理-修改',notNull:'请选择你要修改的记录!',popBack : function () {
+            window.console && console.log(111);
+          }}
+          ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true,ajaxBack: function (rst) {
+            window.console && console.log(rst);
+            if (rst.state) {
+              $('#ul-groupTree').tree('reload');
+            };
+          }}]
+          ,[{iconCls:'user',btnCls:'warning',text:'分配角色',url:'userRole.html?id={id}',onlyOne:true,popHeight:480,popWidth:550,title:'组织管理-分配角色',notNull:'请选择你要分配角色的行！'}]
         ],
         fitColumns : true,
         rownumbers : false,
@@ -270,57 +293,37 @@ define(function () {
           flatData : true,
           columns:[[
               {title:'模块名称',field:'name',width:120},
+              {title:'模块权限',field:'status',width:40,align:'center',formatter: function (value,row) {
+                  return '<label class="pad-l10 pad-r10"><input type="checkbox" class="chk-all" '+(value?"checked":"")+' /></label>';
+              }},
               {title:'操作权限',field:'power',width:250,formatter: function (value,row) {
                 // window.console && console.log(row.power);
                 var roleRowHtml = '';
                 if(row.power){
                   roleRowHtml += '<div class="roleRow">';
                   $.each(row.power,function (i,v) {
-                    roleRowHtml += '<label class="mar-r10"><input type="checkbox" class="chk'+(v.state?" chked":"")+'" name="'+v.id+'" '+(v.state?"checked":"")+' /> '+v.text+'</label>';
+                    roleRowHtml += '<label class="mar-r10"><input type="checkbox" class="chk'+(v.status?" chked":"")+'" name="'+v.id+'" '+(v.status?"checked":"")+' /> '+v.text+'</label>';
                   });
                   roleRowHtml += '</div>';
                 }
                 return roleRowHtml;
-              }},
-              {title:'全选',field:'id',width:40,align:'center',formatter: function (value,row) {
-                  return '<label class="pad-l10 pad-r10"><input type="checkbox" class="chk-all" /></label>';
               }}
           ]],
           onCheckNode : function (a,b) {
-            window.console && console.log(a,b);
+            // window.console && console.log(a,b);
           },
           onLoadSuccess : function (row,data) {
             checkChkState();
-            // window.console && console.log(data);
           }
       });
 
-      function rowChkChked () {
-        $('.datagrid-row').each(function () {
-            var _self = $(this);
-            if (_self.find('.chk').length) {
-              var $allChk = _self.find('.chk-all');
-              var chked = _self.find('.chk').length == _self.find('.chked').length;
-              $allChk[chked?'addClass':'removeClass']('allChked').prop('checked',chked);
-            };
-        });
-      }
-      function treeChkChked () {
-        $('.treegrid-tr-tree').each(function () {
-            var _self = $(this);
-              var chked = _self.find('.chk-all').length == _self.find('.allChked').length;
-              _self.prev('.datagrid-row').find('.chk-all')[chked?'addClass':'removeClass']('allChked').prop('checked',chked);;
-        });
-      }
       function checkChkState () {
-        window.console && console.log($('.datagrid-row').length);
-        rowChkChked();
-        treeChkChked();
+        // window.console && console.log($('.datagrid-row').length);
         $('.chk-all').click(function () {
           var _self = $(this);
           var chked = _self.prop('checked');
           _self[chked?'addClass':'removeClass']('allChked');
-          window.console && console.log(chked);
+          // window.console && console.log(chked);
           var $thisRow = _self.parents('.datagrid-row');
           var $treeRow = $thisRow.next('.treegrid-tr-tree');
           // window.console && console.log($treeRow);
@@ -331,7 +334,6 @@ define(function () {
           $chks_b.prop('checked',chked);
           $chks_c.prop('checked',chked);
           $chks_c[chked?'addClass':'removeClass']('allChked');
-          treeChkChked();
         });
 
         $('.chk').click(function() {
@@ -339,14 +341,13 @@ define(function () {
           var chked = _self.prop('checked');
           _self[chked?'addClass':'removeClass']('chked');
           var $thisRow = _self.parents('.datagrid-row');
-          var $treeRow = _self.parents('.treegrid-tr-tree');
           var $rowAllChk = $thisRow.find('.chk-all');
-          var $moAllChk = $treeRow.prev('.datagrid-row').find('.chk-all');
-          var rowAllchked = $thisRow.find('.chk').length == $thisRow.find('.chked').length;
-          var moAllchked = $treeRow.find('.chk').length == $treeRow.find('.chked').length;
-          $rowAllChk.prop('checked',rowAllchked);
-          $moAllChk.prop('checked',moAllchked);
-          treeChkChked();
+          if (chked) {
+            $rowAllChk.prop('checked',chked);
+          };
+          if ($thisRow.find('.chked').length == 0) {
+              $rowAllChk.prop('checked',false);
+          };
         });
       }
 
