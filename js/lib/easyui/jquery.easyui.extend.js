@@ -3,7 +3,7 @@ $.fn.tree.defaults.loadFilter = function (data, parent) {
     if (opt.flatData) {
         var idFiled,textFiled,parentField;
         idFiled = opt.idFiled || 'id';
-        textFiled = opt.textFiled || 'text';
+        textFiled = opt.textFiled || 'name';
         parentField = opt.parentField || 'pid';
 
         var i,l,treeData = [],tmpMap = [];

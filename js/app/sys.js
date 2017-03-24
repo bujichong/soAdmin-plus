@@ -1,4 +1,4 @@
-define(function () {
+define(['template'],function (template) {
     var back  ={
     users : function () {
       $grid.newGrid("#gridBox",{
@@ -244,20 +244,22 @@ define(function () {
 
     },
     moduleAdd : function () {
-      $('#fieldset-new-0').find('.s-closeFieldset').click(function() {
-        $('#fieldset-new-0').remove();
+
+      // $hook.validate('#formModule');
+      $hook.validate('#formModuleAdd');
+
+      $('.btn-addNewFunc').click(function () {
+        $('#formModuleAdd').submit();
       });
 
-      var num = 1;
-      $('.btn-addNewFunc').click(function () {
-        $('.addNewFuncBox').append(template('addNewFunc',{id:num}));
-        window.console && console.log($('#fieldset-new-'+num).find('.s-closeFieldset').length);
-        $('#fieldset-new-'+num).find('.s-closeFieldset').click(function() {
-          $(this).parent('.fieldset-new').remove();
-        });
-        num++;
-        return false;
-      });
+      var moduleLen = $('.chk-module').length-1;
+      window.addOneModule = function () {
+          var vals = $('#formModuleAdd').serializeObject();
+          moduleLen++;
+          vals.num = moduleLen;
+          $('#moduleBox').append(template('newModule',vals));
+          return false;
+      }
 
     },
     log : function () {

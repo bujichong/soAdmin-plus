@@ -1304,8 +1304,10 @@ var $hook = {
                 // onkeyup: true,
                 // onfocusout: false,
                 errorPlacement: function (lable, element) {
-                    $(element).tooltip({content: lable.html(), position: 'right', hideDelay: 0});
-                    $(element).tooltip("show");
+                    // if (lable[0].innerHTML) {
+                        $(element).tooltip({content: lable.html(), position: 'right', hideDelay: 0}).tooltip("show");
+                    // };
+                    // window.console && console.log(lable,lable[0].innerHTML);
                 },
                 success: function (lable, element) {
                     $(element).tooltip("destroy");
@@ -1486,45 +1488,37 @@ var $hook = {
     }
 };
 
-if ($.validator) {
 
-    $.validator.addMethod("username", function (value, element) {
-        return value.match(/^[0-9a-zA-Z_]{1,}$/);
-    }, "只能输入字母、数字、下划线");
-    $.validator.addMethod("cn", function (value, element) {
-        return value.match(/^[\u0391-\uFFE5]+$/);
-    }, "请输入中文");
-    $.validator.addMethod("nm", function (value, element) {
-        return value.match(/^[\u0391-\uFFE5A-Za-z0-9]+$/);
-    }, "请输入合法的值");
-    $.validator.addMethod("ip", function (value, element) {
-        return value.match(/^[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]\.[0-2]?[0-9]?[0-9]$/);
-    }, "请输入合法的IP");
-    $.validator.addMethod("pNumber", function (value, element) {
-        if (value) {
-        return value.match(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/);
-        };
-        return true;
-    }, "请输入一个正数");
-    $.validator.addMethod("pInt", function (value, element) {//非负整数
-        if (value) {
-            return value.match(/^(0|[1-9]\d*)$/);
-        };
-        return true;
-    }, "请输入一个正整数");
-    $.validator.addMethod("int", function (value, element) {
-        if (value) {
-            return value.match(/^-?\d+$/);
-        };
-        return true;
-    }, "请输入一个整数");
-    $.validator.addMethod("diymonth", function (value, element) {
-        if (value) {
-            return value.match(/^[0-9]+(\.[0-9]{1})?$/);
-        };
-        return true;
-    }, "月数为正整数或一位小数");
-}
+var JPlaceHolder = {
+    init : function(){//初始化
+        if(!this._check()){
+            this.fix();
+        }
+    },
+    _check : function(){//检测
+        return 'placeholder' in document.createElement('input');
+    },
+    fix : function(){//修复
+        $(':input[placeholder]').each(function(index, element) {
+            var self = $(this), txt = self.attr('placeholder');
+            self.wrap($('<div></div>').css({position:'relative', zoom:'1', border:'none', background:'none', padding:'none', margin:'none'}));
+            var pos = self.position(), h = self.outerHeight(true), paddingleft = self.css('padding-left');
+            var holder = $('<span class="s-placeholder"></span>').text(txt).css({position:'absolute', left:pos.left, top:pos.top, height:h, lineHeight:h+'px', paddingLeft:paddingleft, color:'#aaa'}).appendTo(self.parent());
+            if (self.val()) {holder.hide();};
+            self.focusin(function(e) {
+                holder.hide();
+            }).focusout(function(e) {
+                if(!self.val()){
+                    holder.show();
+                }
+            });
+            holder.click(function(e) {
+                holder.hide();
+                self.focus();
+            });
+        });
+    }
+};
 
 $(function () {
     $hook.widget();//存放比较零碎的
@@ -1534,4 +1528,5 @@ $(function () {
     $hook.popGrid();
     $hook.popTree();
     $hook.wdDate();
+    JPlaceHolder.init();
 });

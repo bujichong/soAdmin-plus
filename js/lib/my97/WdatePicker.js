@@ -2,7 +2,7 @@
  * My97 DatePicker 4.8 Beta2
  * License: http://www.my97.net/dp/license.asp
  */
- var my97Root = 'js/lib/my97/';
+ var my97Root = airBaseRoot?(airBaseRoot+'js/lib/my97/'):'js/lib/my97/';
 var $dp,WdatePicker;(function(){var $={
 $langList:[{name:"en",charset:"UTF-8"},{name:"zh-cn",charset:"UTF-8"},{name:"zh-tw",charset:"UTF-8"}],
 $skinList:[
