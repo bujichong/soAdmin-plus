@@ -24,8 +24,8 @@
            <div class="form-group">
               <label class="col-xs-2 control-label">用户名：</label>
               <div class="col-xs-4">
-                 <!-- <input class="form-control required" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" /> -->
-                 <input class="form-control required {remote:'json/remote.js?proUserName=myadmin',messages:{remote:'用户名已存在'}}" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" />
+                 <input class="form-control required" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" />
+                 <!-- <input class="form-control required {remote:'json/remote.js?proUserName=myadmin',messages:{remote:'用户名已存在'}}" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" /> -->
               </div>
               <label class="col-xs-2 control-label">姓名：</label>
               <div class="col-xs-4">
@@ -60,12 +60,13 @@
               <label class="col-xs-2 control-label">关联网站：</label>
               <div class="col-xs-4">
                  <!-- <input class="form-control hk_pop required" id="userSites" data-opt="{type:'grid',url:'json/userSite.js',code:'userSite',searchLabel:'网站名称',searchName:'name',textId:'userSites',textVal:'name',valueId:'userSitesId',valueVal:'id',boxOpt:{width:640,height:468},muti:true}" type="text" name="name" value="" placeholder="请选择关联组织" readonly="readonly" /> -->
-                 <input class="form-control easyui-combobox required"  style="width:100%;" id="userSites" type="text" name="userSites" value="" placeholder="请选择关联组织" data-options="valueField: 'id',textField: 'text',url: 'json/combo.js',multiple:true,onChange: function(newValue,oldValue){}"/>
+                 <input class="form-control easyui-combobox required" style="width:100%;" id="userSites" type="text" name="userSites" value="" placeholder="请选择关联组织" data-options="valueField: 'id',textField: 'text',url: 'json/combo.js',multiple:true,required:true"/>
                  <!-- <input type="hidden" class="txt" id="userSitesId" name="userSitesId" /> -->
               </div>
               <label class="col-xs-2 control-label">关联组织：</label>
               <div class="col-xs-4">
-                 <input class="form-control hk_pop required" data-opt="{type:'tree',url:'/json/groupTree.js',value:'text',width:'90%',height:'90%',title:false}" type="text" name="name" value="" maxlength="20" placeholder="请选择关联组织" readonly="readonly" />
+                 <!-- <input class="form-control hk_pop required" data-opt="{type:'tree',url:'/json/groupTree.js',value:'text',width:'90%',height:'90%',title:false}" type="text" name="name" value="" maxlength="20" placeholder="请选择关联组织" readonly="readonly" /> -->
+                 <input class="form-control easyui-combotree required" style="width:100%;" data-options="url:'/json/groupTree.js',method:'get',flatData:true,multiple:true,onlyLeafCheck:true" type="text" name="group" value="" maxlength="20" placeholder="请选择关联组织" />
               </div>
            </div>
 
@@ -112,7 +113,7 @@
     </form>
 </div>
 
-<script src="js/require.js" data-main="js/main"></script>
+<script src="js/require.js" data-main="js/main.un"></script>
 </body>
 
 </html>

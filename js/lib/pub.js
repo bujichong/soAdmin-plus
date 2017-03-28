@@ -1179,13 +1179,14 @@ var $hook = {
                         url : null,//json url
                         valueId : null,
                         valuePid : null,
-                         selectedId : null,
+                        selectedId : null,
                         width:'400px',height:'300px',
                         title : '请双击选择',
                         value:'text',
                         justLeaf: false,
                         data : null,
                         flatData : true,
+                        treeOpt : {},//其他tree参数
                         onDblClick : function (node) {}
                     },myOpt||{});
 
@@ -1219,7 +1220,9 @@ var $hook = {
                             onLoadSuccess : function (node,data) {
                                 pData.data = data;
                             }
-                      }
+                      };
+
+                    treeOpt = $.extend(treeOpt,pData.treeOpt);
 
                         if (!alreadyRenderTree) {
                             $('#ul-Tree-'+rdm).tree(treeOpt);
@@ -1342,7 +1345,8 @@ var $hook = {
                     if (data.beforeCallback) {//提交之前事件函数
                         callSumbit = window[data.beforeCallback]();
                     };
-                    $.applyIf(params, $(vform).serializeObject());
+                    window.console && console.log($(vform).serializeObject(data.dataToString));
+                    $.applyIf(params, $(vform).serializeObject(data.dataToString));
                     var fn = function (rst) {
                         parent.window._refreshParent = true;
                         window.console && console.log(data.callback);
@@ -1359,51 +1363,6 @@ var $hook = {
             });
             return $form;
         }
-    },
-    easyValidate: function (formCls) {
-        formCls = formCls || ".easy-form";
-        if ($(formCls).length) {
-            $(formCls).form({
-                onSubmit: function () {
-                    var fm = $(this), url = fm.attr("action"), data = $util.data(this);
-                    var valid = fm.form("validate");
-                    if (valid) {
-
-                        if ($('.hk_editor_required').length) {//富编辑框必填验证
-                            var state = true;
-                          $('.hk_editor_required').each(function () {
-                            var ueName = $(this).attr('class').match(/editorkey_.+/g)||['editorkey_eyeUe'];
-                            ueName = ueName[0].split(/ |_/)[1];
-                            // window.console && console.log(ueName,window[ueName].hasContents());
-                            if (window[ueName].hasContents()) {
-                                $('.editorkey_'+ueName).tooltip("destroy");
-                            }else{
-                                $('.editorkey_'+ueName).tooltip({content: '内容为必填！', position: 'right', hideDelay: 0});
-                                state =false;
-                            };
-                          });
-                          if (!state) { return false;};
-                        };
-
-                        var callSumbit = true;
-                        if (data.beforeCallback) {//提交之前事件函数
-                            callSumbit = window[data.beforeCallback]();
-                        };
-                        if (callSumbit) {
-                            $ajax.post(url, $(this).serializeObject(), true).done(function (rst) {
-                                if (rst.state) {
-                                    if (data.callback)window[data.callback](rst);
-                                    parent.window._refreshParent = true;
-                                    // if (data.submitClear) $(data.submitClear).val("");
-                                    $util.closePop();
-                                }
-                            });
-                        }
-                    }
-                    return false;
-                }
-            });
-        };
     },
     easyValidate3: function (formCls) {
         formCls = formCls || ".easy-form";
@@ -1523,7 +1482,7 @@ var JPlaceHolder = {
 $(function () {
     $hook.widget();//存放比较零碎的
     $hook.validate();
-    $hook.easyValidate();
+    // $hook.easyValidate();
     $hook.search();
     $hook.popGrid();
     $hook.popTree();

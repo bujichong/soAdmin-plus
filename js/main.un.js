@@ -4,6 +4,7 @@
 var v=".js?v="+(new Date()).getTime();
 var airBaseRoot = '/';
 require.config({
+    baseUrl : '/js/',
     map: {
         "*": {"css": "css.min"}
     },

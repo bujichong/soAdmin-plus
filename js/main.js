@@ -1306,6 +1306,31 @@ $.format = $.validator.format;
 	});
 })(jQuery);
 
+if ($.validator) {
+   $.validator.prototype.elements = function () {
+       var validator = this,
+         rulesCache = {};
+
+       // select all valid inputs inside the form (no submit or reset buttons)
+       return $(this.currentForm)
+       .find("input, select, textarea")
+       .not(":submit, :reset, :image, [disabled]")
+       .not(this.settings.ignore)
+       .filter(function () {
+           if (!this.name && validator.settings.debug && window.console) {
+               console.error("%o has no name assigned", this);
+           }
+           //注释这行代码
+           // select only the first element for each name, and only those with rules specified
+           //if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+           //    return false;
+           //}
+           rulesCache[this.name] = true;
+           return true;
+       });
+   }
+}
+
 
 /**--jQuery.metadata.js--**/
 (function($){$.extend({metadata:{defaults:{type:"class",name:"metadata",cre:/({.*})/,single:"metadata"},setType:function(type,name){this.defaults.type=type;this.defaults.name=name},get:function(elem,opts){var settings=$.extend({},this.defaults,opts);if(!settings.single.length)settings.single="metadata";var data=$.data(elem,settings.single);if(data)return data;data="{}";if(settings.type=="class"){var m=settings.cre.exec(elem.className);if(m)data=m[1]}else if(settings.type=="elem"){if(!elem.getElementsByTagName)return undefined;var e=elem.getElementsByTagName(settings.name);if(e.length)data=$.trim(e[0].innerHTML)}else if(elem.getAttribute!=undefined){var attr=elem.getAttribute(settings.name);if(attr)data=attr}if(data.indexOf("{")<0)data="{"+data+"}";data=eval("("+data+")");$.data(elem,settings.single,data);return data}}});$.fn.metadata=function(opts){return $.metadata.get(this[0],opts)}})(jQuery);
@@ -1331,8 +1356,7 @@ jQuery.extend(jQuery.validator.messages, {
         min: jQuery.validator.format("请输入一个最小为{0}的数")
 });
 
-
-$.fn.serializeObject = function() {
+$.fn.serializeObject = function(dataToString) {
     var o = {};
     var a = this.serializeArray();
     $.each(a, function() {
@@ -1345,14 +1369,15 @@ $.fn.serializeObject = function() {
             o[this.name] = this.value || '';
         }
     });
-    $.each(o,function (k,v) {
-        if (v.push) {
-            o[k] = v.join(',');
-        }
-    });
+    if (dataToString) {
+        $.each(o,function (k,v) {
+            if (v.push) {
+                o[k] = v.join(',');
+            }
+        });
+    };
     return o;
 }
-
 
 $.validator.addMethod("username", function (value, element) {
     return value.match(/^[0-9a-zA-Z_]{1,}$/);
@@ -2175,27 +2200,7 @@ var $T = {
         window.console && console.log('cooke中 '+co+'更新为 " '+$.cookie(co)+' " ');
     }
 }
-
-$.fn.serializeObject = function() {
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name]) {
-            if (!o[this.name].push) {
-                o[this.name] = [ o[this.name] ];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    $.each(o,function (k,v) {
-        if (v.push) {
-            o[k] = v.join(',');
-        }
-    });
-    return o;
-};
+;
 define("jquery.extend", ["param","layer.min","jquery.validate","my97"], function(){});
 
 /**
@@ -18244,7 +18249,7 @@ $.fn.treegrid.defaults.loadFilter = function (data, parent) {
     if (opt.flatData) {
         var idFiled,textFiled,parentField;
         idFiled = opt.idFiled || 'id';
-        textFiled = opt.textFiled || 'text';
+        textFiled = opt.textFiled || 'name';
         parentField = opt.parentField || 'pid';
 
         var i,l,treeData = [],tmpMap = [];
@@ -18273,7 +18278,7 @@ $.fn.combotree.defaults.loadFilter = function(data, parent) {
     if (opt.flatData) {
         var idFiled, textFiled, parentField;
         idFiled = opt.idFiled || 'id';
-        textFiled = opt.textFiled || 'text';
+        textFiled = opt.textFiled || 'name';
         parentField = opt.parentField || 'pid';
 
         var i, l, treeData = [], tmpMap = [];
@@ -19480,13 +19485,14 @@ var $hook = {
                         url : null,//json url
                         valueId : null,
                         valuePid : null,
-                         selectedId : null,
+                        selectedId : null,
                         width:'400px',height:'300px',
                         title : '请双击选择',
                         value:'text',
                         justLeaf: false,
                         data : null,
                         flatData : true,
+                        treeOpt : {},//其他tree参数
                         onDblClick : function (node) {}
                     },myOpt||{});
 
@@ -19520,7 +19526,9 @@ var $hook = {
                             onLoadSuccess : function (node,data) {
                                 pData.data = data;
                             }
-                      }
+                      };
+
+                    treeOpt = $.extend(treeOpt,pData.treeOpt);
 
                         if (!alreadyRenderTree) {
                             $('#ul-Tree-'+rdm).tree(treeOpt);
@@ -19643,7 +19651,8 @@ var $hook = {
                     if (data.beforeCallback) {//提交之前事件函数
                         callSumbit = window[data.beforeCallback]();
                     };
-                    $.applyIf(params, $(vform).serializeObject());
+                    window.console && console.log($(vform).serializeObject(data.dataToString));
+                    $.applyIf(params, $(vform).serializeObject(data.dataToString));
                     var fn = function (rst) {
                         parent.window._refreshParent = true;
                         window.console && console.log(data.callback);
@@ -19660,51 +19669,6 @@ var $hook = {
             });
             return $form;
         }
-    },
-    easyValidate: function (formCls) {
-        formCls = formCls || ".easy-form";
-        if ($(formCls).length) {
-            $(formCls).form({
-                onSubmit: function () {
-                    var fm = $(this), url = fm.attr("action"), data = $util.data(this);
-                    var valid = fm.form("validate");
-                    if (valid) {
-
-                        if ($('.hk_editor_required').length) {//富编辑框必填验证
-                            var state = true;
-                          $('.hk_editor_required').each(function () {
-                            var ueName = $(this).attr('class').match(/editorkey_.+/g)||['editorkey_eyeUe'];
-                            ueName = ueName[0].split(/ |_/)[1];
-                            // window.console && console.log(ueName,window[ueName].hasContents());
-                            if (window[ueName].hasContents()) {
-                                $('.editorkey_'+ueName).tooltip("destroy");
-                            }else{
-                                $('.editorkey_'+ueName).tooltip({content: '内容为必填！', position: 'right', hideDelay: 0});
-                                state =false;
-                            };
-                          });
-                          if (!state) { return false;};
-                        };
-
-                        var callSumbit = true;
-                        if (data.beforeCallback) {//提交之前事件函数
-                            callSumbit = window[data.beforeCallback]();
-                        };
-                        if (callSumbit) {
-                            $ajax.post(url, $(this).serializeObject(), true).done(function (rst) {
-                                if (rst.state) {
-                                    if (data.callback)window[data.callback](rst);
-                                    parent.window._refreshParent = true;
-                                    // if (data.submitClear) $(data.submitClear).val("");
-                                    $util.closePop();
-                                }
-                            });
-                        }
-                    }
-                    return false;
-                }
-            });
-        };
     },
     easyValidate3: function (formCls) {
         formCls = formCls || ".easy-form";
@@ -19824,7 +19788,7 @@ var JPlaceHolder = {
 $(function () {
     $hook.widget();//存放比较零碎的
     $hook.validate();
-    $hook.easyValidate();
+    // $hook.easyValidate();
     $hook.search();
     $hook.popGrid();
     $hook.popTree();
@@ -19839,6 +19803,7 @@ define("pub", ["jquery.extend","easyui.extend"], function(){});
 var v=".js?v="+(new Date()).getTime();
 var airBaseRoot = '/';
 require.config({
+    baseUrl : '/js/',
     map: {
         "*": {"css": "css.min"}
     },

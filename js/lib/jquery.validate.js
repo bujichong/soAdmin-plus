@@ -1190,6 +1190,31 @@ $.format = $.validator.format;
 	});
 })(jQuery);
 
+if ($.validator) {
+   $.validator.prototype.elements = function () {
+       var validator = this,
+         rulesCache = {};
+
+       // select all valid inputs inside the form (no submit or reset buttons)
+       return $(this.currentForm)
+       .find("input, select, textarea")
+       .not(":submit, :reset, :image, [disabled]")
+       .not(this.settings.ignore)
+       .filter(function () {
+           if (!this.name && validator.settings.debug && window.console) {
+               console.error("%o has no name assigned", this);
+           }
+           //注释这行代码
+           // select only the first element for each name, and only those with rules specified
+           //if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+           //    return false;
+           //}
+           rulesCache[this.name] = true;
+           return true;
+       });
+   }
+}
+
 
 /**--jQuery.metadata.js--**/
 (function($){$.extend({metadata:{defaults:{type:"class",name:"metadata",cre:/({.*})/,single:"metadata"},setType:function(type,name){this.defaults.type=type;this.defaults.name=name},get:function(elem,opts){var settings=$.extend({},this.defaults,opts);if(!settings.single.length)settings.single="metadata";var data=$.data(elem,settings.single);if(data)return data;data="{}";if(settings.type=="class"){var m=settings.cre.exec(elem.className);if(m)data=m[1]}else if(settings.type=="elem"){if(!elem.getElementsByTagName)return undefined;var e=elem.getElementsByTagName(settings.name);if(e.length)data=$.trim(e[0].innerHTML)}else if(elem.getAttribute!=undefined){var attr=elem.getAttribute(settings.name);if(attr)data=attr}if(data.indexOf("{")<0)data="{"+data+"}";data=eval("("+data+")");$.data(elem,settings.single,data);return data}}});$.fn.metadata=function(opts){return $.metadata.get(this[0],opts)}})(jQuery);
@@ -1215,8 +1240,7 @@ jQuery.extend(jQuery.validator.messages, {
         min: jQuery.validator.format("请输入一个最小为{0}的数")
 });
 
-
-$.fn.serializeObject = function() {
+$.fn.serializeObject = function(dataToString) {
     var o = {};
     var a = this.serializeArray();
     $.each(a, function() {
@@ -1229,14 +1253,15 @@ $.fn.serializeObject = function() {
             o[this.name] = this.value || '';
         }
     });
-    $.each(o,function (k,v) {
-        if (v.push) {
-            o[k] = v.join(',');
-        }
-    });
+    if (dataToString) {
+        $.each(o,function (k,v) {
+            if (v.push) {
+                o[k] = v.join(',');
+            }
+        });
+    };
     return o;
 }
-
 
 $.validator.addMethod("username", function (value, element) {
     return value.match(/^[0-9a-zA-Z_]{1,}$/);

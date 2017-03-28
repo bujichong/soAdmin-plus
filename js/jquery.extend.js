@@ -450,24 +450,3 @@ var $T = {
         window.console && console.log('cooke中 '+co+'更新为 " '+$.cookie(co)+' " ');
     }
 }
-
-$.fn.serializeObject = function() {
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name]) {
-            if (!o[this.name].push) {
-                o[this.name] = [ o[this.name] ];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    $.each(o,function (k,v) {
-        if (v.push) {
-            o[k] = v.join(',');
-        }
-    });
-    return o;
-}
