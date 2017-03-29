@@ -50,6 +50,12 @@ height:35px;line-height: 35px;padding:0 0 0 40px;margin:0;font-size: 14px;font-w
 .popGridHead{padding:10px;}
 .popGridHead .btn{margin-left: 5px;}
 
+.a-op{display: -moz-inline-stack;display:inline-block;*display:inline;*zoom:1;width:20px;height:20px;text-indent: -999em;overflow: hidden;background:url(../images/icon/i-op.png) no-repeat;margin:9px 5px 0;cursor:hand;cursor:pointer;}
+.a-opEdit{background-position: 0 0;}
+.a-opDel{background-position: -20px 0px;}
+.a-opEdit:hover{background-position: 0 -20px;}
+.a-opDel:hover{background-position: -20px -20px;}
+
 .fieldset-group{margin:15px 30px 5px 20px;}
 .h4-form{margin:10px 25px 20px 20px;background:url(../images/dotted.png) repeat-x 0 100%;font-size:14px;color:#1FB4E0;font-weight: bold;}
 .h4-form .s-t{display: -moz-inline-stack;display:inline-block;*display:inline;*zoom:1;position: relative;top:7px;background-color: #fff;padding:0 10px 0 0;}

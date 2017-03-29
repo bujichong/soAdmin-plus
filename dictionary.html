@@ -25,12 +25,20 @@
           <div class="form-group"><input type="text" class="form-control" name="key" placeholder="字典项标识"></div>
           <button type="button" class="btn btn-info hk_search"  data-opt="{grid:'#gridBox',scope:'#sbox'}">查 询</button>
       </form>
+
+      <form id="sbox2" class="form-inline none">
+          <div class="form-group"><input type="text" class="form-control" name="key" placeholder="字典项标识"></div>
+          <button type="button" class="btn btn-info hk_search"  data-opt="{grid:'#gridBox',scope:'#sbox2'}">查 询</button> <button type="button" class="btn btn-warning btn-backToKinds">返 回</button>
+      </form>
+
     </div>
 
-    <div class="gridWrap">
+    <div class="gridWrap gridWrap-1">
       <div id="gridBox"></div>
     </div>
-
+    <div class="gridWrap gridWrap-2">
+      <div id="gridBox2"></div>
+    </div>
 </div>
 
 <div class="none"></div>

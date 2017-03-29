@@ -73,10 +73,11 @@ define(['template'],function (template) {
       });
     },
     dict : function () {
-      $grid.newGrid("#gridBox",{
+
+      var dictKindsOpt = {
         tools:[
-          [{iconCls:'plus',text:'新增',url:'dictAdd.html',popHeight:330,title:'数据字典-新增'}
-          ,{iconCls:'pencil',btnCls:'warning',text:'修改',onlyOne:true,popHeight:330,url:'dictAdd.html?id={id}',title:'数据字典-修改',notNull:'请选择你要修改的记录!'}
+          [{iconCls:'plus',text:'新增分类',url:'dictAdd.html',popHeight:330,title:'数据字典-新增'}
+          ,{iconCls:'pencil',btnCls:'warning',text:'修改分类',onlyOne:true,popHeight:330,url:'dictAdd.html?id={id}',title:'数据字典-修改',notNull:'请选择你要修改的记录!'}
           ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true}]
         ],
         fitColumns : true,
@@ -87,7 +88,52 @@ define(['template'],function (template) {
         columns:[[
            {title:'id',field:'id',checkbox:true}
           ,{title:'组别',field:'group',width:90}
-          ,{title:'类别',field:'type',width:90}
+          ,{title:'组别名',field:'type',width:90}
+          ,{title:'状态',field:'status',width:70,formatter:function(r){
+                return ['','<span class="green">启动</span>','<span class="red">停用</span>'][r];
+              }
+            }
+          ,{title:'描述',field:'desc',width:100}
+          ,{title:'更新时间',field:'modifyDate',width:140}
+          ,{title:'更新人',field:'modifyer',width:100}
+          ,{title:'编辑',field:'edit',width:100,formatter:function(value,row,index){
+              return '<span class="a-op a-opEdit"  rel="'+row.id+'" href="#">编辑</span>'
+                // return '<span class="s-edit" rel="'+row.id+'">编辑</span>';
+              }}
+        ]],
+        onLoadSuccess : function () {
+          $('.a-opEdit').click(function () {
+            var id = $(this).attr('rel');
+            $('#sbox').hide();
+            $('.gridWrap-1').hide();
+            $('#sbox2').show();
+            $('.gridWrap-2').show();
+            if ($('.gridWrap-2 .baseToobar').length) {
+              $('#gridBox2').datagrid('reload');
+            }else{
+              $grid.newGrid("#gridBox2",dictOpt);
+            };
+            return false;
+          });
+        },
+        url:'json/dict.js'
+        // ,offset : -50
+      }
+
+      var dictOpt = {
+        tools:[
+          [{iconCls:'plus',text:'新增字典项',url:'dictAdd.html',popHeight:330,title:'数据字典-新增'}
+          ,{iconCls:'pencil',btnCls:'warning',text:'修改字典项',onlyOne:true,popHeight:330,url:'dictAdd.html?id={id}',title:'数据字典-修改',notNull:'请选择你要修改的记录!'}
+          ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true}]
+        ],
+        fitColumns : true,
+        rownumbers : false,
+        // singleSelect : false,
+        checkOnSelect : false,
+        selectOnCheck : false,
+        columns:[[
+           {title:'id',field:'id',checkbox:true}
+          ,{title:'组别',field:'group',width:90}
           ,{title:'字典项标识',field:'key',width:120}
           ,{title:'字典项值',field:'value',width:100}
           ,{title:'排序',field:'sort',width:100}
@@ -101,7 +147,19 @@ define(['template'],function (template) {
         ]],
         url:'json/dict.js'
         // ,offset : -50
+      };
+
+      $grid.newGrid("#gridBox",dictKindsOpt);
+
+      $('.btn-backToKinds').click(function() {
+        $('#sbox2').hide();
+        $('.gridWrap-2').hide();
+        $('#sbox').show();
+        $('.gridWrap-1').show();
       });
+
+      // $grid.newGrid("#gridBox",dictOpt);
+
     },
     userRole : function () {
 /*      $('#ul-roleTree').tree({
