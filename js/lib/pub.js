@@ -626,6 +626,7 @@ var $grid = {
                 onlyOne : false,//只能选择一行
                 newWin : false,//在新窗口打开
                 ajax : false,//ajax事件
+                post : false,//ajax改为 post参数方式
                 endBack : function () {},
                 ajaxBack : function (data) {},
                 click : function () {}
@@ -650,30 +651,55 @@ var $grid = {
                 }
                 var url = o.url;
                 if (url) {
-                    var ps = [], re = /\{(\w+)\}/g, c, map = {};
-                    while (c = re.exec(url)) {
-                        ps.push(c[1]);
-                        map[c[1]] = [];
-                    }
-                    if (ps.length > 0 && rows.length > 0) {
-                        for (var i = 0; i < rows.length; i++) {
-                            var tt = rows[i];
-                            for (var j = 0; j < ps.length; j++) {
-                                map[ps[j]].push(tt[ps[j]]);
+                    if (o.post) {
+                        if (o.post.constructor !== String) {o.post = 'id=id'};//默认取id
+                        var map= [];
+                        if (rows.length>0) {
+                            var ps = [],keyArr = [];
+                            ps = o.post.split('&');
+                            for (var c = 0; c < ps.length; c++) {
+                                keyArr.push(ps[c].split('='));
+                                // map[keyArr[c][0]]=[];
                             }
+                            for (var i = 0; i < rows.length; i++) {
+                                var tt = rows[i];
+                                for (var j = 0; j < ps.length; j++) {
+                                    map.push(keyArr[j][0]+'='+tt[keyArr[j][1]]);
+                                }
+                            }
+                            map = map.join('&');
+                            window.console && console.log(map);
+                        };
+                    }else{
+                        var ps = [], re = /\{(\w+)\}/g, c, map = {};
+                        while (c = re.exec(url)) {
+                            ps.push(c[1]);
+                            map[c[1]] = [];
                         }
-                        for (var k in map) {
-                            map[k] = map[k].join(",");
+                        if (ps.length > 0 && rows.length > 0) {
+                            for (var i = 0; i < rows.length; i++) {
+                                var tt = rows[i];
+                                for (var j = 0; j < ps.length; j++) {
+                                    map[ps[j]].push(tt[ps[j]]);
+                                }
+                            }
+                            for (var k in map) {
+                                map[k] = map[k].join(",");
+                            }
+                            url = $util.format(url, map);
                         }
-                        url = $util.format(url, map);
-                    }
+                    };
+                    // window.console && console.log(url);
+                    // window.console && console.log(map);
                     if(o.newWin){
                         window.open(url);
                         _self.blur();
                         return;
                     }
                     if (o.ajax) {
-                        $ajax.post(url, {}, o.ajaxMsg).done(function (rst) {
+                        var ajaxData = o.post?map:{};
+                        window.console && console.log(ajaxData);
+                        $ajax.post(url, ajaxData, o.ajaxMsg).done(function (rst) {
                             o.ajaxBack(rst);
                             if (rst.state) {
                                 $grid.reload(grid);
@@ -1186,7 +1212,6 @@ var $hook = {
                         justLeaf: false,
                         data : null,
                         flatData : true,
-                        treeOpt : {},//其他tree参数
                         onDblClick : function (node) {}
                     },myOpt||{});
 
@@ -1220,9 +1245,8 @@ var $hook = {
                             onLoadSuccess : function (node,data) {
                                 pData.data = data;
                             }
-                      };
+                      }
 
-                    treeOpt = $.extend(treeOpt,pData.treeOpt);
 
                         if (!alreadyRenderTree) {
                             $('#ul-Tree-'+rdm).tree(treeOpt);
@@ -1326,6 +1350,11 @@ var $hook = {
                     } else {
                         params = data.params || {};
                     }
+                    var paramsHtml = '';
+                    $.each(params,function (k,v) {
+                        paramsHtml += '<input type="hidden" name="'+k+'" value="'+v+'">';
+                    });
+                    $(vform).append(paramsHtml);
                     if ($('.hk_editor_required').length) {//富编辑框必填验证
                         var state = true;
                       $('.hk_editor_required').each(function () {
@@ -1343,14 +1372,20 @@ var $hook = {
                     };
                     var callSumbit = true;
                     if (data.beforeCallback) {//提交之前事件函数
-                        callSumbit = window[data.beforeCallback]();
+                        callSumbit = window[data.beforeCallback](data);
                     };
-                    window.console && console.log($(vform).serializeObject(data.dataToString));
-                    $.applyIf(params, $(vform).serializeObject(data.dataToString));
+                    // $.applyIf(params, $(vform).serializeObject(data.dataToString));
+                    params = $(vform).serialize();
+                    // window.console && console.log(params);
                     var fn = function (rst) {
                         parent.window._refreshParent = true;
-                        window.console && console.log(data.callback);
-                        if (data.callback)window[data.callback](rst);
+                        // window.console && console.log(data.callback);
+                        if (data.callback){
+                            var callName = data.callback.split('||');
+                            $.each(callName,function (i,v) {
+                                window[v]&&window[v](rst,data);
+                            });
+                        }
                         if (rst.state) {$util.closePop();};
 
                         if (data.submitClear)$(data.submitClear).val("");
@@ -1482,7 +1517,6 @@ var JPlaceHolder = {
 $(function () {
     $hook.widget();//存放比较零碎的
     $hook.validate();
-    // $hook.easyValidate();
     $hook.search();
     $hook.popGrid();
     $hook.popTree();

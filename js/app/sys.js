@@ -6,7 +6,7 @@ define(['template'],function (template) {
         tools:[
         [{iconCls:'plus',text:'新增',url:'userForm.html',popHeight:400,popWidth:560,title:'用户信息-新增'}
           ,{iconCls:'pencil',btnCls:'warning',text:'修改',onlyOne:true,popHeight:400,popWidth:560,popMax:true,url:'userForm.html?id={id}',title:'用户信息-修改',notNull:'请选择你要修改的记录!'}
-          ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true,ajaxMsg:'你确定提交此删除操作吗？'}]
+          ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js',post:'id=id',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true,ajaxMsg:'你确定提交此删除操作吗？'}]
           ,[{iconCls:'refresh',btnCls:'warning',text:'重置密码',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要重置密码的一项或多项！', ajax:true,ajaxMsg:'你确定重置密码为 <strong class="orange">123456</strong> 吗？'}
           ,{iconCls:'repeat',btnCls:'warning',text:'更新状态',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要更新状态的一项或多项！', ajax:true,ajaxMsg:'你确定提交此更新操作吗？'}]
           ,[{iconCls:'pushpin',text:'分配角色',url:'userRole.html?id={id}',onlyOne:true,popHeight:380,popWidth:360,title:'用户信息-分配角色',notNull:'请选择你要分配角色的用户！'}]
@@ -72,9 +72,8 @@ define(['template'],function (template) {
         // ,offset : -50
       });
     },
-    dict : function () {
-
-      var dictKindsOpt = {
+    dictKind : function () {
+      $grid.newGrid("#gridBox",{
         tools:[
           [{iconCls:'plus',text:'新增分类',url:'dictAdd.html',popHeight:330,title:'数据字典-新增'}
           ,{iconCls:'pencil',btnCls:'warning',text:'修改分类',onlyOne:true,popHeight:330,url:'dictAdd.html?id={id}',title:'数据字典-修改',notNull:'请选择你要修改的记录!'}
@@ -104,23 +103,17 @@ define(['template'],function (template) {
         onLoadSuccess : function () {
           $('.a-opEdit').click(function () {
             var id = $(this).attr('rel');
-            $('#sbox').hide();
-            $('.gridWrap-1').hide();
-            $('#sbox2').show();
-            $('.gridWrap-2').show();
-            if ($('.gridWrap-2 .baseToobar').length) {
-              $('#gridBox2').datagrid('reload');
-            }else{
-              $grid.newGrid("#gridBox2",dictOpt);
-            };
+            window.location.href="";
             return false;
           });
         },
         url:'json/dict.js'
         // ,offset : -50
-      }
-
-      var dictOpt = {
+      });
+      // $grid.newGrid("#gridBox",dictOpt);
+    },
+    dict : function () {
+      $grid.newGrid("#gridBox",{
         tools:[
           [{iconCls:'plus',text:'新增字典项',url:'dictAdd.html',popHeight:330,title:'数据字典-新增'}
           ,{iconCls:'pencil',btnCls:'warning',text:'修改字典项',onlyOne:true,popHeight:330,url:'dictAdd.html?id={id}',title:'数据字典-修改',notNull:'请选择你要修改的记录!'}
@@ -147,18 +140,11 @@ define(['template'],function (template) {
         ]],
         url:'json/dict.js'
         // ,offset : -50
-      };
-
-      $grid.newGrid("#gridBox",dictKindsOpt);
-
-      $('.btn-backToKinds').click(function() {
-        $('#sbox2').hide();
-        $('.gridWrap-2').hide();
-        $('#sbox').show();
-        $('.gridWrap-1').show();
       });
 
-      // $grid.newGrid("#gridBox",dictOpt);
+      $('.btn-backToKinds').click(function () {
+          window.location.href="";
+      });
 
     },
     userRole : function () {

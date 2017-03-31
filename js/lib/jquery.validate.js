@@ -1266,6 +1266,9 @@ $.fn.serializeObject = function(dataToString) {
 $.validator.addMethod("username", function (value, element) {
     return value.match(/^[0-9a-zA-Z_]{1,}$/);
 }, "只能输入字母、数字、下划线");
+$.validator.addMethod("complexPass", function (value, element) {
+  return value.match(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)(?=.*?[-`=\\\[\];',./~!@#$%^&*()_+|{}:"<>?]).*$/);
+}, "必须含大小写字母、数字及特殊字符");
 $.validator.addMethod("cn", function (value, element) {
     return value.match(/^[\u0391-\uFFE5]+$/);
 }, "请输入中文");
