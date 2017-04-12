@@ -1350,10 +1350,10 @@ jQuery.extend(jQuery.validator.messages, {
         accept: "请输入拥有合法后缀名的字符串",
         maxlength: jQuery.validator.format("输入内容最长 {0}"),
         minlength: jQuery.validator.format("输入内容最短 {0}"),
-        rangelength: jQuery.validator.format("输入内容长度必须介于 {0} 和 {1} 之间"),
-        range: jQuery.validator.format("只能填{0}~{1}之间的数"),
-        max: jQuery.validator.format("请输入一个最大为{0}的数"),
-        min: jQuery.validator.format("请输入一个最小为{0}的数")
+        rangelength: jQuery.validator.format("内容长度 {0} 和 {1} 之间"),
+        range: jQuery.validator.format("数值区间{0}~{1}"),
+        max: jQuery.validator.format("数值最大为{0}"),
+        min: jQuery.validator.format("数值最小为{0}")
 });
 
 $.fn.serializeObject = function(dataToString) {
