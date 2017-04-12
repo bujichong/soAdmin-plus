@@ -23,34 +23,34 @@
         <fieldset>
            <div class="form-group">
               <label class="col-xs-2 control-label">用户名：</label>
-              <div class="col-xs-4">
-                 <input class="form-control required" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" />
+              <div class="col-xs-4 control-cont">
+                 <input class="form-control required" type="text" name="userName" value="" maxlength="20" placeholder="用户名" />
                  <!-- <input class="form-control required {remote:'json/remote.js?proUserName=myadmin',messages:{remote:'用户名已存在'}}" type="text" name="userName" value="ss" maxlength="20" placeholder="用户名" /> -->
               </div>
               <label class="col-xs-2 control-label">姓名：</label>
-              <div class="col-xs-4">
-                 <input class="form-control" type="text" name="realName" value="" maxlength="20" placeholder="姓名" />
+              <div class="col-xs-4 control-cont">
+                 <input class="form-control required" type="text" name="realName" value="" maxlength="20" placeholder="姓名" />
               </div>
            </div>
 
            <div class="form-group">
               <label class="col-xs-2 control-label">密码：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <input class="form-control"  id="password" type="password" name="password" value="" maxlength="20" placeholder="默认密码123456" />
               </div>
               <label class="col-xs-2 control-label">确认密码：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <input class="form-control {equalTo:'#password'}" type="password" name="repassword" value="" maxlength="20" placeholder="再输入一次密码" />
               </div>
            </div>
 
            <div class="form-group">
               <label class="col-xs-2 control-label">电话号码：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <input class="form-control" type="text" name="mobile" value="" maxlength="20" placeholder="电话号码" />
               </div>
               <label class="col-xs-2 control-label">性别：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                   <label class="radio-inline"><input class="rad {required:true}"  type="radio" value="1" name="sex" />男</label>
                   <label class="radio-inline"><input class="rad" type="radio" value="2" name="sex" />女</label>
               </div>
@@ -58,25 +58,25 @@
 
            <div class="form-group">
               <label class="col-xs-2 control-label">关联网站：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <!-- <input class="form-control hk_pop required" id="userSites" data-opt="{type:'grid',url:'json/userSite.js',code:'userSite',searchLabel:'网站名称',searchName:'name',textId:'userSites',textVal:'name',valueId:'userSitesId',valueVal:'id',boxOpt:{width:640,height:468},muti:true}" type="text" name="name" value="" placeholder="请选择关联组织" readonly="readonly" /> -->
                  <input class="form-control easyui-combobox required" style="width:100%;" id="userSites" type="text" name="userSites" value="" placeholder="请选择关联组织" data-options="valueField: 'id',textField: 'text',url: 'json/combo.js',multiple:true,required:true"/>
                  <!-- <input type="hidden" class="txt" id="userSitesId" name="userSitesId" /> -->
               </div>
               <label class="col-xs-2 control-label">关联组织：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <!-- <input class="form-control hk_pop required" data-opt="{type:'tree',url:'/json/groupTree.js',value:'text',width:'90%',height:'90%',title:false}" type="text" name="name" value="" maxlength="20" placeholder="请选择关联组织" readonly="readonly" /> -->
-                 <input class="form-control easyui-combotree required" style="width:100%;" data-options="url:'/json/groupTree.js',method:'get',flatData:true,multiple:true,onlyLeafCheck:true" type="text" name="group" value="" maxlength="20" placeholder="请选择关联组织" />
+                 <input class="form-control easyui-combotree required" style="width:100%;" data-options="url:'/json/groupTree.js',method:'get',flatData:true,multiple:true,onlyLeafCheck:true,required:true" type="text" name="group" value="" maxlength="20" placeholder="请选择关联组织" />
               </div>
            </div>
 
            <div class="form-group">
               <label class="col-xs-2 control-label">Email：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <input class="form-control email" type="text" name="email" value="" maxlength="20" placeholder="请输入email地址" />
               </div>
               <label class="col-xs-2 control-label">QQ：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <input class="form-control number" type="text" name="QQ" value="" maxlength="20" placeholder="QQ号码" />
               </div>
 
@@ -84,7 +84,7 @@
 
            <div class="form-group">
 <!--               <label class="col-xs-2 control-label">角色：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                 <select name="roleId" class="form-control required">
                   <option value="">请选择...</option>
                   <option value="1">角色一</option>
@@ -94,11 +94,11 @@
                 </select>
               </div> -->
               <label class="col-xs-2 control-label">微信：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                  <input class="form-control" type="text" name="weChat" value="" maxlength="20" placeholder="" />
               </div>
               <label class="col-xs-2 control-label">账号状态：</label>
-              <div class="col-xs-4">
+              <div class="col-xs-4 control-cont">
                 <label class="radio-inline"><input class="rad {required:true}"  type="radio" value="1" name="state" />启用</label>
                 <label class="radio-inline"><input class="rad"   type="radio" value="2" name="state" />停用</label>
               </div>

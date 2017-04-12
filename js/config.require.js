@@ -8,7 +8,7 @@ require.config({
         "jquery.extend": "jquery.extend",
         "bootstrap": "bootstrap.min",
         "easyui":"lib/easyui/jquery.easyui.min",
-        "easyui.extend":"lib/easyui/jquery.easyui.extend",
+        // "easyui.extend":"lib/easyui/jquery.easyui.extend",
         "md5":"lib/md5",
         "param":"lib/param",
         "pub":"lib/pub",
@@ -29,11 +29,11 @@ require.config({
         "layer.min":["jquery"],
         "jquery.extend":["param","layer.min","jquery.validate","my97"],
         "easyui":["jquery"],
-        "easyui.extend":["easyui"],
+        // "easyui.extend":["easyui"],
         "bootstrap":["jquery"],
         "template": {"exports": "template"},
         "chinaMap":["echarts","echartsMap"],
-        "pub":["jquery.extend","easyui.extend"],
+        "pub":["jquery.extend","easyui"],
         "baidueditor": {"deps": ["lib/ueditor1.4.3.3-utf8-jsp/ueditor.config", "css!lib/ueditor1.4.3.3-utf8-jsp/themes/default/css/ueditor"]},
         "bdlang":{"deps": ["baidueditor"]}
     }

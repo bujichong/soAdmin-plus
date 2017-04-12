@@ -2792,10 +2792,11 @@ border-bottom:1px solid #00A0E9;
   margin: -12px 0 0 -6px;
 }
 .tooltip {
-  background-color: #fdf7db;
-  border-color: #fbd396;
-  color: #000000;
+  background-color: #f9f6e3;
+  border-color: #ffdfad;
+  color: #c00;
 }
+.tooltip b{font-weight: normal;}
 .tooltip-arrow{border-right-color:#fdf7db!important;}
 .tooltip-right .tooltip-arrow-outer {
   border-right-color: #fbd396!important;

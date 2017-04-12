@@ -74,6 +74,10 @@ height:35px;line-height: 35px;padding:0 0 0 40px;margin:0;font-size: 14px;font-w
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px #ce8483;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px #ce8483;
 }
+
+.control-cont{position: relative;}
+.control-cont label.error{position:absolute;left:11px;top:28px;color:#c00;}
+.control-cont label.error b{font-weight: normal;}
 .btn-formS{padding:7px 25px;font-weight: bold;}
 .btn-cancel:hover{
 background-color: #f8f8f8;

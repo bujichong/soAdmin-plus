@@ -1331,9 +1331,11 @@ var $hook = {
                 // onkeyup: true,
                 // onfocusout: false,
                 errorPlacement: function (lable, element) {
-                    // if (lable[0].innerHTML) {
+                    if (element.data('errpos')==1) {
+                        lable.insertAfter(element);
+                    }else{
                         $(element).tooltip({content: lable.html(), position: 'right', hideDelay: 0}).tooltip("show");
-                    // };
+                    };
                     // window.console && console.log(lable,lable[0].innerHTML);
                 },
                 success: function (lable, element) {
