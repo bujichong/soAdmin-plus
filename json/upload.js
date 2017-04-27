@@ -1,1 +1,1 @@
-{"tip":0,"state":true,"msg":"","fileUrl":"http://www.eyebasesys.com/uploadDemo/demo.jpg"}
+{"tip":1,"state":false,"msg":"上传失败，请联系管理员~","fileUrl":"http://www.eyebasesys.com/uploadDemo/demo.jpg"}

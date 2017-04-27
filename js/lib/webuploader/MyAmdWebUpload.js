@@ -144,7 +144,7 @@ return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         var rgx= '('+opts.unAccept+')$';
         var re=new RegExp(rgx);
         uploader.on('beforeFileQueued',function (file) {
-            window.console && console.log(file);
+            // window.console && console.log(file);
             if (file.name.length>opts.fileNameMaxLength) {
                 layer.msg('对不起，上传文件名不能大于'+opts.fileNameMaxLength+'个字符！',{icon:1});
                 return false;
@@ -205,16 +205,19 @@ return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         });
         uploader.on('uploadSuccess', function (file, response) {//上传成功事件
             //debugger
-            // window.console && console.log(file,response);
-            opts.uploadSuccess(file,response);
-            if (response.state == "error") {
-                target.find('#' + $(item)[0].id + file.id).find('span.webuploadstate').html(response.message);
-            } else {
+            window.console && console.log(file,response);
+            if (response.state) {
+                opts.uploadSuccess(file,response);
                 target.find('#' + $(item)[0].id + file.id).find('span.webuploadstate').html('已上传');
                 $hiddenInput.append('<input type="text" id="hiddenInput'+$(item)[0].id + file.id + '" class="hiddenInput" value="' + response[opts.fileKey] + '" />')
+            } else {
+                if (opts.btnStyle) {
+                    var msg = response.tip?response.msg:'对不起，上传失败！';
+                    layer.msg(msg,{icon:1});
+                }else{
+                    target.find('#' + $(item)[0].id + file.id).find('span.webuploadstate').html(response.message);
+                };
             }
-
-
         });
 
         uploader.on('uploadError', function (file,reason) {

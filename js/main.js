@@ -18390,6 +18390,18 @@ var $util = {
 
         return tpl.replace(/#?\{([A-Za-z_0-9]+)\}/g, _replace);
     },
+    parseParam : function(param, key){
+        var paramStr="";
+        if(param instanceof String||param instanceof Number||param instanceof Boolean){
+            paramStr+="&"+key+"="+encodeURIComponent(param);
+        }else{
+            $.each(param,function(i){
+                var k=key==null?i:key+(param instanceof Array?"["+i+"]":"."+i);
+                paramStr+='&'+$util.parseParam(this, k);
+            });
+        }
+        return paramStr.substr(1);
+    },
     excel: function (url, titles, fields, param) {
         param = param || {};
         $.applyIf(param, {
@@ -18959,6 +18971,9 @@ var $grid = {
                 }
                 var url = o.url;
                 if (url) {
+                    if (typeof url == 'function') {
+                        url = url();
+                    };
                     if (o.post) {
                         if (o.post.constructor !== String) {o.post = 'id=id'};//默认取id
                         var map= [];
@@ -18976,7 +18991,7 @@ var $grid = {
                                 }
                             }
                             map = map.join('&');
-                            window.console && console.log(map);
+
                         };
                     }else{
                         var ps = [], re = /\{(\w+)\}/g, c, map = {};
@@ -19006,7 +19021,6 @@ var $grid = {
                     }
                     if (o.ajax) {
                         var ajaxData = o.post?map:{};
-                        window.console && console.log(ajaxData);
                         $ajax.post(url, ajaxData, o.ajaxMsg).done(function (rst) {
                             o.ajaxBack(rst);
                             if (rst.state) {
@@ -19206,13 +19220,13 @@ var $pop = {
             var searchName = data.searchName || 'searchValue';
             var searchLabel = data.searchLabel || '';
             var boxTpl = "<div id='pop_{gridId}' style='display:none'>"+
-            "<div class='form-inline popGridHead'>"+
-            "<div class='form-group'><input type='text' class='form-control' name='"+searchName+"' placeholder='"+searchLabel+"'></div>"+
-            "<button type='button' class='btn btn-info fnSearch'>查 询</button>"+
+            "<form class='form-inline popGridHead pad10'>"+
+            "<div class='form-group'><input type='text' class='form-control' name='"+searchName+"' placeholder='"+searchLabel+"'> </div>"+
+            " <button type='button' class='btn btn-info fnSearch'>查 询</button>"+
             "<button type='button' class='btn btn-warning fnSure"+(muti?'':' none')+"'>确 定</button>"+
                 // "<span><input type='button' class='btn btn-submit fnSearch' value='查 询' /></span>"+
                 // "<input type='button' class='btn btn-submit fnSure' value='确 定' />"+
-            "</div>"+
+            "</form>"+
             "<div class='pad-l10 pad-r10 pad-b5'><div id='{gridId}'></div></div></div>";
             $('body').append($util.format(boxTpl, {gridId: gridId}));
         }
@@ -19220,7 +19234,7 @@ var $pop = {
         var boxOpt = {
             type :1,
             title: muti?'选择后点击确定按钮':'请双击选择行',
-            area : ['500px','476px'],
+	    area : ['500px','494px'],
             content: $('#pop_' + gridId)
         };
         $.extend(true, boxOpt, data.boxOpt || {});
@@ -19266,7 +19280,7 @@ var $pop = {
             }
             $grid.newGrid('#' + gridId, gridCfg);
             $('.fnSearch', '#pop_' + gridId).click(function () {
-                var ps = $('#pop_' + gridId).serializeObject();
+                var ps = $('#pop_' + gridId).find('.popGridHead').serializeObject();
                 $grid.load('#' + gridId, ps);
             });
             if (muti) {
@@ -19291,7 +19305,13 @@ var $pop = {
         if (typeof(params) == "function") {
             params = params();
         }
+        var urlParams = data.urlParams || '';
+        if (typeof(urlParams) == "function") {
+            urlParams = urlParams();
+        }
+        // urlParams = $util.parseParam(urlParams);
         params.$url = url;
+        if (urlParams) {params.$url = params.$url+urlParams};
         $grid.load('#' + gridId, params);
     },
     popTree: function (opt) {
@@ -19431,17 +19451,20 @@ var $hook = {
             });
         }
         if ($('.formA').length) {//回车替代tab事件
-            var $input = $('.formA').find(':input');
-            $input.eq(0).focus();
-            $input.keydown(function(e) {
-                if (e.keyCode == 13) {
-                    if ($(this).hasClass('btn')) {return;};
-                    var ix = $input.index(this);
-                    // window.console && console.log(ix);
-                    $input.eq(ix+1).focus();
-                    return false;
-                };
-            });
+            setTimeout(function () {
+                var $input = $('.formA').find(':input').filter(':visible');
+                // window.console && console.log($input);
+                $input.eq(0).focus();
+                $input.keydown(function(e) {
+                    if (e.keyCode == 13) {
+                        if ($(this).hasClass('btn')) {return;};
+                        var ix = $input.index(this);
+                        // window.console && console.log(ix);
+                        $input.eq(ix+1).focus();
+                        return false;
+                    };
+                });
+            },600);
         };
         if ($(".hk_form .btn-closePop").length) {
             $(".hk_form .btn-closePop").click(function () {
@@ -19513,7 +19536,7 @@ var $hook = {
                         url : null,//json url
                         valueId : null,
                         valuePid : null,
-                        selectedId : null,
+                         selectedId : null,
                         width:'400px',height:'300px',
                         title : '请双击选择',
                         value:'text',
@@ -19554,7 +19577,6 @@ var $hook = {
                                 pData.data = data;
                             }
                       }
-
 
                         if (!alreadyRenderTree) {
                             $('#ul-Tree-'+rdm).tree(treeOpt);
@@ -19684,12 +19706,11 @@ var $hook = {
                     if (data.beforeCallback) {//提交之前事件函数
                         callSumbit = window[data.beforeCallback](data);
                     };
-                    // $.applyIf(params, $(vform).serializeObject(data.dataToString));
+                    //$.applyIf(params, $(vform).serializeObject(data.dataToString));
                     params = $(vform).serialize();
-                    // window.console && console.log(params);
                     var fn = function (rst) {
                         parent.window._refreshParent = true;
-                        // window.console && console.log(data.callback);
+                        //window.console && console.log(data.callback);
                         if (data.callback){
                             var callName = data.callback.split('||');
                             $.each(callName,function (i,v) {

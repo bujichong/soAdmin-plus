@@ -31,7 +31,7 @@ a:hover{color:#c00;}
 
 .em-icon{display: -moz-inline-stack;display:inline-block;*display:inline;*zoom:1;font-family: 'iconfont';font-size:1em;width: 1em;height:1em;margin:0 4px 0 0;}
 /* form now on */
-.header{position: absolute;top:0px;width: 100%;left:0px;height:58px;color:#fff;z-index: 7;background:#7dc9f0 url(../images/headerbg.jpg) no-repeat 0 0;}
+.header{position: absolute;top:0px;width: 100%;left:0px;height:58px;color:#fff;z-index: 7;background:#7dc9f0;}
 .header a{color:#fff;}
 /*.header a:hover{color:#FBAD66;}*/
 /*.extendSide{position: absolute;left:0px;top:59px;width:16px;bottom:0px;background:#1E80B1 url(../images/sidenav/i-ex.png) no-repeat 0 45%;cursor:hand;cursor:pointer;}
