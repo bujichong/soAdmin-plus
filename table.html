@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>日志管理 - 爱尔医院筹建管理系统</title>
+<link rel="icon" href="images/logo.ico" type="image/x-icon" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap-theme.css" />
+<link rel="stylesheet" type="text/css" media="all" href="js/lib/easyui/themes/gray/easyui.css" />
+<link type="text/css" rel="stylesheet" href="css/newbase.css" />
+</head>
+<body data-js="sys:log">
+
+<div class="wrapper">
+  <h2 class="h2-normalTitle">普通表格列表</h2>
+
+  <table class="table-list" cellspacing="0" cellpadding="0">
+    <tr class="tr-head"><th>操作</th><th>登录名</th><th>登录IP</th><th>等级</th><th>日志内容</th><th>创建时间</th></tr>
+    <tr>
+      <td>
+        <a class="a-op a-opEdit" href="record/" title="编辑">编辑</a>
+        <a class="a-op a-opDel" href="del/" title="删除">删除</a>
+        <a class="a-op a-opSearch" href="del/" title="查看">查看</a>
+        <span class="a-op a-opRight" href="del/" title="正确">正确</span>
+        <span class="a-op a-opErr" href="del/" title="错误">错误</span>
+        <a class="a-op a-opUser" href="record/" title="权限">权限</a>
+      </td>
+      <td>admin</td>
+      <td>12.10.14.124</td>
+      <td>Trace</td>
+      <td class="tal">admin登录了系统</td>
+      <td>2013-07-10 12:14:23</td>
+    </tr>
+    <tr class="tr-odd">
+      <td>
+        <a class="a-op a-opEdit" href="record/" title="编辑">编辑</a>
+        <a class="a-op a-opDel" href="del/" title="删除">删除</a>
+        <a class="a-op a-opSearch" href="del/" title="查看">查看</a>
+        <span class="a-op a-opRight" href="del/" title="正确">正确</span>
+        <span class="a-op a-opErr" href="del/" title="错误">错误</span>
+        <a class="a-op a-opUser" href="record/" title="权限">权限</a>
+      </td>
+      <td>admin2</td>
+      <td>12.10.14.124</td>
+      <td>Trace</td>
+      <td class="tal">admin登录了系统</td>
+      <td>2013-07-10 12:14:23</td>
+    </tr>
+    <tr>
+      <td>
+        <a class="a-op a-opEdit" href="record/" title="编辑">编辑</a>
+        <a class="a-op a-opDel" href="del/" title="删除">删除</a>
+        <a class="a-op a-opSearch" href="del/" title="查看">查看</a>
+        <span class="a-op a-opRight" href="del/" title="正确">正确</span>
+        <span class="a-op a-opErr" href="del/" title="错误">错误</span>
+        <a class="a-op a-opUser" href="record/" title="权限">权限</a>
+      </td>
+      <td>admin3</td>
+      <td>12.10.14.124</td>
+      <td>Trace</td>
+      <td class="tal">admin登录了系统</td>
+      <td>2013-07-10 12:14:23</td>
+    </tr>
+    <tr class="tr-odd">
+      <td>
+        <a class="a-op a-opEdit" href="record/" title="编辑">编辑</a>
+        <a class="a-op a-opDel" href="del/" title="删除">删除</a>
+        <a class="a-op a-opSearch" href="del/" title="查看">查看</a>
+        <span class="a-op a-opRight" href="del/" title="正确">正确</span>
+        <span class="a-op a-opErr" href="del/" title="错误">错误</span>
+        <a class="a-op a-opUser" href="record/" title="权限">权限</a>
+      </td>
+      <td>admin</td>
+      <td>12.10.14.124</td>
+      <td>Trace</td>
+      <td class="tal">admin登录了系统</td>
+      <td>2013-07-10 12:14:23</td>
+    </tr>
+  </table>
+
+<br /><br />
+
+
+    <div class="gridWrap">
+      <div id="gridBox"></div>
+    </div>
+
+</div>
+
+<div class="none"></div>
+<script src="js/require.js" data-main="js/main.un"></script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ define(['template'],function (template) {
       $grid.newGrid("#gridBox",{
         // toolbar:'#baseToobar',
         tools:[
-        [{iconCls:'plus',text:'新增',url:'userForm.html',popMax:true,title:'用户信息-新增'}
+        [{iconCls:'plus',text:'新增',url:'login.html',popMax:true,title:'用户信息-新增'}
           ,{iconCls:'pencil',btnCls:'warning',text:'修改',onlyOne:true,popHeight:400,popWidth:560,popMax:true,url:'userForm.html?id={id}',title:'用户信息-修改',notNull:'请选择你要修改的记录!'}
           ,{iconCls:'trash',btnCls:'danger',text:'删除',check:true,url:'json/true.js',post:'id=id',notNull:'请 <strong class="red">勾选</strong> 需要删除的一项或多项！', ajax:true,ajaxMsg:'你确定提交此删除操作吗？'}]
           ,[{iconCls:'refresh',btnCls:'warning',text:'重置密码',check:true,url:'json/true.js?id={id}',notNull:'请 <strong class="red">勾选</strong> 需要重置密码的一项或多项！', ajax:true,ajaxMsg:'你确定重置密码为 <strong class="orange">123456</strong> 吗？'}
@@ -328,6 +328,13 @@ define(['template'],function (template) {
         // ,offset : -50
       });
     },
+    dictEdit : function () {
+      $('#txt-dicName').blur(function () {
+        $ajax.post('json/pinyin.js').done(function (rst) {
+          $('#pinyinCode').val(rst.pinyin);
+        })
+      });
+    },
     setRolePower : function () {
       $('#setPowerTree').treegrid({
           url:'json/roleTreeGrid2.js',
@@ -340,7 +347,7 @@ define(['template'],function (template) {
           columns:[[
               {title:'模块名称',field:'name',width:120},
               {title:'模块权限',field:'status',width:40,align:'center',formatter: function (value,row) {
-                  return '<label class="pad-l10 pad-r10"><input type="checkbox" class="chk-all" '+(value?"checked":"")+' /></label>';
+                  return '<label class="pad-l10 pad-r10"><input type="checkbox" name="chkAll" class="chk-all" '+(value?"checked":"")+' /></label>';
               }},
               {title:'操作权限',field:'power',width:250,formatter: function (value,row) {
                 // window.console && console.log(row.power);

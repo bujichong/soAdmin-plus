@@ -314,7 +314,7 @@ var $util = {
     },
     notNull: function (obj, msg) {
         if (!$(obj).val()) {
-            $.sobox.alert("提示", msg || '不能为空!');
+            layer.msg( msg || '不能为空!',{icon:0});
             return false;
         }
         return true;
@@ -1111,18 +1111,29 @@ var $hook = {
     search: function (btnCls) {
         var cls = btnCls || '.hk_search';
         if ($(cls).length) {
+            $(cls).each(function () {
+                var data = $util.data(this);
+                var scope = data.scope;
+                if (scope != null ){
+                    $(scope).submit(function () {
+                        var formId = data.form;
+                        if (formId != null && !$(formId).valid()) {
+                            return;
+                        }
+                        var scope = data.scope, param = $(scope).serializeObject(), gridId = data.grid;
+                        if (data.tab) {
+                            var sli = $('li.tabs-selected', data.tab), inx = $('.tabs li', data.tab).index(sli);
+                            gridId += (inx + 1);
+                        }
+                        $grid.load(gridId, param);
+                        return false;
+                    });
+                }
+            });
             $(cls).click(function () {
                 var data = $util.data(this);
-                var formId = data.form;
-                if (formId != null && !$(formId).valid()) {
-                    return;
-                }
-                var scope = data.scope, param = $(scope).serializeObject(), gridId = data.grid;
-                if (data.tab) {
-                    var sli = $('li.tabs-selected', data.tab), inx = $('.tabs li', data.tab).index(sli);
-                    gridId += (inx + 1);
-                }
-                $grid.load(gridId, param);
+                var scope = data.scope;
+                $(scope).submit();
                 return false;
             });
         }

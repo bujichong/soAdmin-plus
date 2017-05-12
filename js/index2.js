@@ -4,10 +4,14 @@ var eyeIndex = {
         window.console && console.log('index js init');
         // me.exScreen();//全屏
         me.exSide();//收缩侧边栏
+        me.exSideInOther();//调用方法可以在子页面收缩侧边栏
         me.setIframeH();//设置iframeH
         me.sideSlide();//侧边栏点击展开
         me.sideNavE();//侧边导航点击链接事件
+        me.repairPass();//修改密码
+        me.noInWindow();//不包含在iframe中
         me.loginOut();//退出登录
+        me.switchCompany();//切换公司医院
         me.tabCloseEven();
       },
       onlyOpenTitle: "系统首页",//不允许关闭的标签的标题
@@ -22,17 +26,88 @@ var eyeIndex = {
           }
         });
       },
-      loginOut : function () {
-        $('.a-loginOut').click(function () {
-          layer.confirm('你确定退出系统吗？', {
-              icon: 0, title:false,btnAlign: 'c'
-              }, function(){
-                window.location.href="login.html";
+    noInWindow : function () {
+      if(window.top !== window.self){window.top.location = window.location;}
+    },
+      switchCompany : function () {
+        var $comList = $('.ul-companyList');
+        if ($comList.length) {
+          $(document).on('click', function (e) {
+              var $t = $(e.target);
+              if ($t.hasClass('nowCompany')) {
+                  $comList.show();
+                  $t.addClass('nowCompany-over');
+              } else {
+                  $comList.hide();
+                  $('.nowCompany').removeClass('nowCompany-over');
+              };
           });
-          return false;
-        });
+          $('.ul-companyList .s-c').click(function() {
+            var rel = $(this).attr('rel');
+            var url = $comList.attr('rel');
+            $.post('index.html',{id:rel}).done(function () {
+              window.location.reload();
+            });
+          });
 
+          $('.allCompanyNav').mouseleave(function () {
+              $('.nowCompany').removeClass('nowCompany-over');
+              $comList.hide();
+          });
+
+          var $nav = $('.allCompanyNav');
+          setTimeout(function () {$nav.addClass('allCompanyNav-over');}, 300);
+          setTimeout(function () {$nav.removeClass('allCompanyNav-over');}, 600);
+          setTimeout(function () {$nav.addClass('allCompanyNav-over');}, 900);
+          setTimeout(function () {$nav.removeClass('allCompanyNav-over');}, 1200);
+          setTimeout(function () {$nav.addClass('allCompanyNav-over');}, 1500);
+          setTimeout(function () {$nav.removeClass('allCompanyNav-over');}, 1800);
+
+        };
       },
+      repairPass : function () {
+        var layerPass = null;
+        window.$pop = {};
+        $('.s-updataPass').click(function () {
+          var url = $(this).attr('rel');
+          layerPass = layer.open({
+            type:2,
+            content : url,
+            title : '修改密码',
+            area : ['400px','280px']
+          });
+          if (url.indexOf("/") != 0) {
+              url = location.pathname.replace(/\/[^/]*$/, "/") + url;
+          }
+          window.console && console.log(url);
+          $pop[url] = layerPass;
+        });
+      },
+      loginOut : function () {
+		 $('.a-loginOut').click(function () {
+	          var href = $(this).attr("href");
+	          layer.confirm('你确定退出系统吗？', {
+	              icon: 0, title:false,btnAlign: 'c'
+	              }, function(){
+	                window.location.href=href;
+	          });
+	          return false;
+	      });
+      },
+      exSideInOther: function () {
+        window.indexInSide =  function () {
+            $(".mainCont").animate({left:'0px'});
+            $(".sidebar").animate({marginLeft:'-188px'});
+        }
+        window.indexExSide=  function () {
+            $(".mainCont").animate({left:'188px'});
+            $(".sidebar").animate({marginLeft:'0px'});
+            $('.li-sidenav').removeClass('li-sidenav-now').eq(0).addClass('li-sidenav-now');
+            $('.s-sidenav').removeClass('s-sidenav-now');
+            $('.s-subnav').removeClass('s-subnav-now');
+        }
+      },
+
       exSide : function () {
         $('.s-extendSide').click(function() {
           var _self = $(this);

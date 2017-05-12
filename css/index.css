@@ -45,10 +45,21 @@ z-index: 2;}
 .h1-logo{float:left;padding:10px 0 0 20px;}
 .h1-logo img{vertical-align: middle;}
 
+.s-company{display: -moz-inline-stack;display:inline-block;*display:inline;*zoom:1;line-height:18px;font-size:18px;padding-left:12px;margin:0 0 0 12px;border-left: 1px solid #ddd;vertical-align: middle;color:#fff;}
+.allCompanyNav{float: left;position: relative;margin:10px 0 0 0;}
+.nowCompany{display: -moz-inline-stack;display:inline-block;*display:inline;*zoom:1;padding:4px 36px 4px 12px;cursor:hand;cursor:pointer;
+font-size:18px;/*margin:0 0 0 12px;*/border-left: 1px solid #ddd;vertical-align: middle;color:#fff;}
+.allCompanyNav-over .nowCompany,.allCompanyNav:hover .nowCompany,.nowCompany-over{background:#33A9E1 url(../images/drop.png) no-repeat 96% center;}
+.ul-companyList{position: absolute;top: 32px;left:0px;width:300px;background-color:#F8FAFC;border:1px solid #D8E0EF;padding:1px;line-height: 2.2em;display: none;max-height:44em;overflow: auto;box-shadow:1px 1px 2px #ddd;-webkit-box-shadow:1px 1px 2px #ddd;-moz-box-shadow:1px 1px 2px #ddd;}
+.ul-companyList .s-c{display: block;padding:5px 15px;color:#255B98;cursor:hand;cursor:pointer;}
+.ul-companyList .s-c:hover{background-color: #486DAA;color: #fff;}
+.ul-companyList .li-list-now .s-c{background-color:#DCE7F5;color:#476CAA;}
+
 .userInfo{float:right;line-height:58px;}
 .userInfo span,.userInfo a{display: -moz-inline-stack;display:inline-block;*display:inline;*zoom:1;}
 .s-welcome{padding:0 0 0 22px;margin-right:25px;background:url(../images/icon/i-user.png) no-repeat 0 20px;}
 .em-userName{color:#004EA2;font-weight: bold;}
+.s-updataPass{padding:0 0 0 22px;margin-right:28px;background:url(../images/icon/i-user.png) no-repeat 2px -78px;cursor:hand;cursor:pointer;}
 .userInfo .s-date{padding:0 0 0 23px;margin-right:28px;background:url(../images/icon/i-user.png) no-repeat 2px -477px;}
 a.a-loginOut{padding:0 20px 0 45px;background:#33A9E1 url(../images/icon/i-user.png) no-repeat 25px -278px;border-left: 1px solid #26A3DF;}
 a.a-loginOut:hover{background-color:#209BD7;border-left:1px solid #209BD7;}

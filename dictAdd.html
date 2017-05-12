@@ -20,11 +20,22 @@
            <div class="form-group">
               <label class="col-xs-2 control-label">组别：</label>
               <div class="col-xs-4">
-                 <input class="form-control required" type="text" name="group" value="" maxlength="20" placeholder="组别" />
+                 <input class="form-control easyui-combobox required" type="text" name="group" maxlength="20" placeholder="组别" style="width:100%;" data-options="valueField:'id',textField:'name',url:'json/groupTree.js',mode:'remote'" value="111" />
               </div>
               <label class="col-xs-2 control-label">类别：</label>
               <div class="col-xs-4">
-                 <input class="form-control required" type="text" name="type" value="" maxlength="20" placeholder="类别" />
+                 <input class="form-control required easyui-combogrid" type="text" name="type" value="" maxlength="20" placeholder="类别"  style="width:100%;" data-options="panelWidth:450,
+            idField:'id',
+            textField:'name',
+            mode:'remote',
+            url:'json/group.js',
+            queryParams : {'order':'desc'},
+            columns:[[
+                {field:'id',title:'id',width:60},
+                {field:'name',title:'医院名称',width:100},
+                {field:'role',title:'部门',width:120}
+            ]]
+        " />
               </div>
            </div>
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>用户设置 - 爱尔医院筹建管理系统</title>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap-theme.css" />
+<link rel="stylesheet" type="text/css" media="all" href="js/lib/easyui/themes/gray/easyui.css" />
+<!-- <link rel="stylesheet" type="text/css" href="js/lib/umeditor1.2.3-utf8-jsp/themes/default/css/umeditor.css"> -->
+<link type="text/css" rel="stylesheet" href="css/newbase.css" />
+</head>
+
+<body>
+<div class="wrapper">
+  <h2 class="h2-normalTitle">用户设置</h2>
+
+  <!-- <div role="tabpanel" class="tab-pane" id="other"> -->
+    <form class="form-horizontal hk_form pad-t15" role="form" method="post" data-opt="" id="vform" action="json/true.js">
+      <fieldset>
+           <div class="form-group">
+              <label class="col-xs-3 control-label">默认组织：</label>
+              <div class="col-xs-7">
+                  <input id="txt-combtree" class="form-control easyui-combotree required" style="width:100%;" data-options="url:'/json/groupTree.js',method:'get',flatData:true,onlyLeafCheck:true,onBeforeSelect:function (node) {if (!$('#txt-combtree').combotree('tree').tree('isLeaf', node.target)) {return false;}}" type="text" name="group" value=""  placeholder="请选择组织" />
+              </div>
+            </div>
+
+
+
+        </fieldset>
+
+        <p class="pad-t10 center">
+          <input type="submit" class="btn btn-info btn-formS btn-submit" name="btnSubmit" value="保 存" />
+          <input type="button" class="btn btn-default btn-formS btn-cancel" name="btnCancel" value="取 消" />
+        </p>
+    </form>
+
+    <!-- </div> -->
+
+
+
+  </div>
+
+
+
+
+
+<script src="js/require.js" data-main="js/main.un"></script>
+
+</body>
+
+</html>

@@ -74,7 +74,7 @@ html #layuicss-skinlayercss{display:none;position:absolute;width:1989px}
 0%{-webkit-transform:scale(1);-ms-transform:scale(1);transform:scale(1)}
 }
 .layer-anim-close{-webkit-animation-name:bounceOut;animation-name:bounceOut;-webkit-animation-duration:.2s;animation-duration:.2s}
-.layui-layer-title{padding:0 80px 0 40px;height:38px;line-height:38px;border-bottom:1px solid #eee;font-size:14px;color:#333;overflow:hidden;border-radius:1px;font-weight: bold;overflow: hidden;background:#F8F8F8 url(../images/icon/i-form.png) no-repeat 15px center;}
+.layui-layer-title{padding:0 80px 0 20px;height:38px;line-height:38px;border-bottom:1px solid #eee;font-size:14px;color:#333;overflow:hidden;border-radius:1px;font-weight: bold;overflow: hidden;background:#F8F8F8;}
 .layui-layer-setwin{position:absolute;right:10px;*right:0;top:11px;font-size:0;line-height:initial}
 .layui-layer-setwin a{position:relative;width:16px;height:16px;margin-left:10px;font-size:12px;_overflow:hidden}
 .layui-layer-setwin .layui-layer-min cite{position:absolute;width:14px;height:2px;left:0;top:50%;margin-top:-1px;background-color:#2E2D3C;cursor:pointer;_overflow:hidden}
